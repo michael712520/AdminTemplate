@@ -15,10 +15,21 @@ namespace AdminTemplate.Controllers
         {
             _service = service;
         }
-        [HttpGet, Route("GetList")]
-        public NetResult GetList(string userId)
+        [HttpGet, Route("Get")]
+        public NetResult Get(string id)
         {
-            return _service.GetList(userId);
+            return _service.Get(id);
+        }
+        [HttpPost, Route("Update")]
+        public NetResult Update([FromBody]MbDetailDto form)
+        {
+            return _service.Update(form);
+        }
+
+        [HttpGet, Route("GetList")]
+        public NetResult GetList(string userId, PaginationStartAndLengthFilter filter)
+        {
+            return _service.GetList(userId, filter);
         }
         [HttpPost, Route("Save")]
         public NetResult Save([FromBody]MbDetailDto form)

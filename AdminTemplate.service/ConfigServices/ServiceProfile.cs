@@ -9,6 +9,7 @@ namespace AdminTemplate.service.ConfigServices
         public ServiceProfiles()
         {
             CreateMap<MbDetailDto, MbDetail>();
+            CreateMap<MbDetailItemDto, MbDetailItem>();
 
         }
     }
