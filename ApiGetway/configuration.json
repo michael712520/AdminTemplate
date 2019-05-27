@@ -1,0 +1,66 @@
+﻿{
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "192.168.70.47",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{url}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/webApi/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "192.168.70.47",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/webApi/{url}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "WebApi",
+        "AllowScopes": [ "AppApi", "WebApi", "WxApi" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/AppApi/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "192.168.70.47",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/AppApi/{url}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AppApi",
+        "AllowScopes": [ "WebApi", "AppApi", "WxApi" ]
+      }
+    }
+  ]
+}
