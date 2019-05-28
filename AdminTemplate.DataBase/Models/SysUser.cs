@@ -12,5 +12,6 @@ namespace AdminTemplate.DataBase.Models
         public int? Createby { get; set; }
         public string Openid { get; set; }
         public int? Type { get; set; }
+        public string NickName { get; set; }
     }
 }

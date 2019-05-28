@@ -1,5 +1,4 @@
-﻿using AdminTemplate.DataBase.Models;
-using AdminTemplate.service.Dto.MbDetail;
+﻿using AdminTemplate.service.Dto.MbDetail;
 using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +42,7 @@ namespace AdminTemplate.Controllers
             return _service.GetListItem(detailId);
         }
         [HttpPost, Route("SaveItem")]
-        public NetResult SaveItem([FromBody]MbDetailItem form)
+        public NetResult SaveItem([FromBody]MbDetailItemDto form)
         {
 
             return _service.SaveItem(form);

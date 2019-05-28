@@ -232,6 +232,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasMaxLength(11)
                     .IsUnicode(false);
 
+                entity.Property(e => e.NickName)
+                    .HasColumnName("nickName")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Openid)
                     .HasColumnName("openid")
                     .HasMaxLength(255)
