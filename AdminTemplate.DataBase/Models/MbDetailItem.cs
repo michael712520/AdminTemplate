@@ -19,6 +19,7 @@ namespace AdminTemplate.DataBase.Models
         public string Bcontemt { get; set; }
         public double? Score { get; set; }
         public string Type { get; set; }
+        public int? Display { get; set; }
 
         public virtual MbDetail Detail { get; set; }
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }

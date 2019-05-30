@@ -17,6 +17,7 @@ namespace AdminTemplate.DataBase.Models
         public int? Order { get; set; }
         public int? State { get; set; }
         public double? Score { get; set; }
+        public int? Display { get; set; }
 
         public virtual ICollection<MbDetailItem> MbDetailItem { get; set; }
     }

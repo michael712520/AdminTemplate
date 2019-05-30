@@ -15,6 +15,7 @@ namespace AdminTemplate.DataBase.Models
         public double? Score { get; set; }
         public string MbDetailItemId { get; set; }
         public string Type { get; set; }
+        public int? Display { get; set; }
 
         public virtual MbDetailItem MbDetailItem { get; set; }
         public virtual QtDetail QtDetail { get; set; }

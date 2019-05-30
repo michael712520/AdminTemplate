@@ -1,4 +1,5 @@
-﻿using AdminTemplate.service.Services;
+﻿using AdminTemplate.service.Dto.SysUser;
+using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +15,9 @@ namespace AdminTemplate.Controllers
             _service = service;
         }
         [HttpPost, Route("Login")]
-        public NetResult Login(string username, string password)
+        public NetResult Login([FromBody]SysUserLogin sysUserLogin)
         {
-            return _service.Login(username, password);
+            return _service.Login(sysUserLogin);
         }
     }
 }

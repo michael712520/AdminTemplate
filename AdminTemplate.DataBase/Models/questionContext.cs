@@ -48,6 +48,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("content")
                     .IsUnicode(false);
 
+                entity.Property(e => e.Display)
+                    .HasColumnName("display")
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("0");
+
                 entity.Property(e => e.Order)
                     .HasColumnName("order")
                     .HasColumnType("int(255)");
@@ -93,6 +98,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("detail_id")
                     .HasMaxLength(32)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Display)
+                    .HasColumnName("display")
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("1");
 
                 entity.Property(e => e.Order)
                     .HasColumnName("order")
@@ -170,6 +180,11 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.Content)
                     .HasColumnName("content")
                     .IsUnicode(false);
+
+                entity.Property(e => e.Display)
+                    .HasColumnName("display")
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("1");
 
                 entity.Property(e => e.MbDetailItemId)
                     .HasColumnName("mb_detail_item_id")

@@ -3,13 +3,13 @@
     public class SysUserLogin
     {
         public string Id { get; set; }
-        public string UserName { get; set; }
-        public string Userpwd { get; set; }
-        public int? State { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string[] Companyid { get; set; }
-        public string[] Companyname { get; set; }
-     
+        public string Username { get; set; }
+        public string Mobile { get; set; }
+        public string Password { get; set; }
+        public int? Createby { get; set; }
+        public string Openid { get; set; }
+        public int? Type { get; set; }
+        public string NickName { get; set; }
+
     }
 }
