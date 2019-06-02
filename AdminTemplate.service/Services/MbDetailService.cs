@@ -34,6 +34,45 @@ namespace AdminTemplate.service.Services
                 return ResponseBodyEntity("", EnumResult.Error, "id未找到");
             }
         }
+        public NetResult UpdateMbDetail(UpdateMbDetailDto form)
+        {
+            var model = DbContext.MbDetailItem.FirstOrDefault(p =>
+                p.DetailId.Equals(form.DetailId) && p.Order == form.Sort);
+            MbDetailItem model2;
+            if (form.Type == 0)
+            {
+                model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
+                  p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort - 1));
+            }
+            else
+            {
+                model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
+                  p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort + 1));
+            }
+
+            if (model != null && model2 != null)
+            {
+                var i = model2.Order;
+                model2.Order = model.Order;
+                model.Order = i;
+                DbContext.MbDetailItem.Update(model2);
+                DbContext.MbDetailItem.Update(model);
+            }
+
+            DbContext.SaveChanges();
+            return ResponseBodyEntity("", EnumResult.Error, "id未找到");
+
+        }
+        public NetResult Delete(string id)
+        {
+
+            var model = DbContext.MbDetailItem.FirstOrDefault(p => p.Id.Equals(id));
+            if (model == null) return ResponseBodyEntity("", EnumResult.Error, "id不存在");
+            DbContext.MbDetailItem.Remove(model);
+            DbContext.SaveChanges();
+            return ResponseBodyEntity();
+
+        }
         public NetResult GetList(string userId, PaginationStartAndLengthFilter filter)
         {
             var query = DbContext.MbDetail.AsNoTracking();

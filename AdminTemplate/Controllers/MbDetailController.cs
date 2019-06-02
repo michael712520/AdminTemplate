@@ -24,6 +24,17 @@ namespace AdminTemplate.Controllers
         {
             return _service.Update(form);
         }
+        [HttpPost, Route("UpdateMbDetail")]
+        public NetResult UpdateMbDetail(UpdateMbDetailDto form)
+        {
+            return _service.Update(form);
+        }
+
+        [HttpPost, Route("Delete/{id}")]
+        public NetResult Delete(string id)
+        {
+            return _service.Delete(id);
+        }
 
         [HttpGet, Route("GetList")]
         public NetResult GetList(string userId, PaginationStartAndLengthFilter filter)
