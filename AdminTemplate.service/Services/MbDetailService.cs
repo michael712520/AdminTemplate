@@ -38,13 +38,13 @@ namespace AdminTemplate.service.Services
         {
             var model = DbContext.MbDetailItem.FirstOrDefault(p =>
                 p.DetailId.Equals(form.DetailId) && p.Order == form.Sort);
-            MbDetailItem model2;
+            MbDetailItem model2 = null;
             if (form.Type == 0)
             {
                 model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
                   p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort - 1));
             }
-            else
+            else if ((form.Type == 1))
             {
                 model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
                   p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort + 1));
@@ -60,7 +60,7 @@ namespace AdminTemplate.service.Services
             }
 
             DbContext.SaveChanges();
-            return ResponseBodyEntity("", EnumResult.Error, "id未找到");
+            return ResponseBodyEntity(new { model, model2 });
 
         }
         public NetResult Delete(string id)
@@ -79,7 +79,8 @@ namespace AdminTemplate.service.Services
             query = query.Where(p => p.UserId.Equals(userId));
             query = query.Where(p => p.UserId.Equals(userId));
             int count = query.Count();
-            var list = query.Skip(filter.Start).Take(filter.Length).ToList();
+            var list = query.Skip(filter.Start).Take(filter.Length).OrderByDescending(
+                o => o.Order).ToList();
             return ResponseBodyEntity(list, count);
         }
         public NetResult Save(MbDetailDto form)
@@ -92,7 +93,7 @@ namespace AdminTemplate.service.Services
         }
         public NetResult GetListItem(string detailId)
         {
-            var list = DbContext.MbDetailItem.Where(p => p.DetailId.Equals(detailId)).ToList();
+            var list = DbContext.MbDetailItem.AsNoTracking().OrderBy(o => o.Order).Where(p => p.DetailId.Equals(detailId)).ToList();
 
             return ResponseBodyEntity(list);
         }
@@ -102,6 +103,8 @@ namespace AdminTemplate.service.Services
             if (form.Id == null)
             {
                 model.Id = Guid.NewGuid().ToString("N");
+                var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
+                if (m != null) model.Order = m.Order + 1;
                 DbContext.MbDetailItem.Add(model);
             }
             else

@@ -25,9 +25,9 @@ namespace AdminTemplate.Controllers
             return _service.Update(form);
         }
         [HttpPost, Route("UpdateMbDetail")]
-        public NetResult UpdateMbDetail(UpdateMbDetailDto form)
+        public NetResult UpdateMbDetail([FromBody]UpdateMbDetailDto form)
         {
-            return _service.Update(form);
+            return _service.UpdateMbDetail(form);
         }
 
         [HttpPost, Route("Delete/{id}")]
