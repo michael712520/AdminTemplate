@@ -15,6 +15,7 @@ namespace AdminTemplate.DataBase.Models
         {
         }
 
+        public virtual DbSet<LatitudeDetail> LatitudeDetail { get; set; }
         public virtual DbSet<MbDetail> MbDetail { get; set; }
         public virtual DbSet<MbDetailItem> MbDetailItem { get; set; }
         public virtual DbSet<QtDetail> QtDetail { get; set; }
@@ -33,6 +34,33 @@ namespace AdminTemplate.DataBase.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+
+            modelBuilder.Entity<LatitudeDetail>(entity =>
+            {
+                entity.ToTable("latitude_detail", "question");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.BaseScore)
+                    .HasColumnName("base_score")
+                    .HasColumnType("double(11,2)");
+
+                entity.Property(e => e.Coefficient)
+                    .HasColumnName("coefficient")
+                    .HasColumnType("double(11,2)");
+
+                entity.Property(e => e.ParentId)
+                    .HasColumnName("parent_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Score)
+                    .HasColumnName("score")
+                    .HasColumnType("double(11,2)");
+            });
 
             modelBuilder.Entity<MbDetail>(entity =>
             {
@@ -82,6 +110,9 @@ namespace AdminTemplate.DataBase.Models
                 entity.HasIndex(e => e.DetailId)
                     .HasName("mb_detail_item_ibfk_1");
 
+                entity.HasIndex(e => e.LatitudeDetailId)
+                    .HasName("latitude_detail_id");
+
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasMaxLength(32)
@@ -103,6 +134,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("display")
                     .HasColumnType("int(11)")
                     .HasDefaultValueSql("1");
+
+                entity.Property(e => e.LatitudeDetailId)
+                    .HasColumnName("latitude_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Order)
                     .HasColumnName("order")
@@ -129,6 +165,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasForeignKey(d => d.DetailId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("mb_detail_item_ibfk_1");
+
+                entity.HasOne(d => d.LatitudeDetail)
+                    .WithMany(p => p.MbDetailItem)
+                    .HasForeignKey(d => d.LatitudeDetailId)
+                    .HasConstraintName("mb_detail_item_ibfk_2");
             });
 
             modelBuilder.Entity<QtDetail>(entity =>

@@ -20,8 +20,10 @@ namespace AdminTemplate.DataBase.Models
         public double? Score { get; set; }
         public string Type { get; set; }
         public int? Display { get; set; }
+        public string LatitudeDetailId { get; set; }
 
         public virtual MbDetail Detail { get; set; }
+        public virtual LatitudeDetail LatitudeDetail { get; set; }
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
     }
 }
