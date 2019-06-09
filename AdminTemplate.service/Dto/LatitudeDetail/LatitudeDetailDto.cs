@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AdminTemplate.DataBase.Models
+﻿namespace AdminTemplate.service.Dto.LatitudeDetail
 {
-    public partial class LatitudeDetail
+    public class LatitudeDetailDto
     {
-        public LatitudeDetail()
-        {
-            MbDetailItem = new HashSet<MbDetailItem>();
-        }
-
         public string Id { get; set; }
         public string ParentId { get; set; }
         public double? Score { get; set; }
@@ -17,7 +9,5 @@ namespace AdminTemplate.DataBase.Models
         public double? BaseScore { get; set; }
         public string Name { get; set; }
         public int? Sort { get; set; }
-
-        public virtual ICollection<MbDetailItem> MbDetailItem { get; set; }
     }
 }
