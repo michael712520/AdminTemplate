@@ -38,5 +38,10 @@ namespace AdminTemplate.Controllers
         {
             return _service.List(id, filter);
         }
+        [HttpGet, Route("GetPicker")]
+        public NetResult GetPicker()
+        {
+            return _service.GetPicker();
+        }
     }
 }

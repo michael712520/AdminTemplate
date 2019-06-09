@@ -1,5 +1,6 @@
 ﻿using AdminTemplate.DataBase.Models;
 using AdminTemplate.service.BaseServices;
+using AdminTemplate.service.Dto.baseReEntity;
 using AdminTemplate.service.Dto.LatitudeDetail;
 using AutoMapper;
 using GlobalConfiguration.Utility;
@@ -99,6 +100,13 @@ namespace AdminTemplate.service.Services
             var count = query.Count();
             var list = query.Skip(filter.Start).Take(filter.Length).OrderByDescending(o => o.Sort).ToList();
             return ResponseBodyEntity(list, count);
+        }
+        public NetResult GetPicker()
+        {
+            var query = DbContext.LatitudeDetail.Include(o => o.MbDetailItem).AsNoTracking();
+            var list = query.OrderByDescending(o => o.Sort).ToList();
+            var data = Mapper.Map<PairChildrenReEntity>(list);
+            return ResponseBodyEntity(data);
         }
     }
 }
