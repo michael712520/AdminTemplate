@@ -1,4 +1,6 @@
-﻿namespace AdminTemplate.service.Dto.MbDetail
+﻿using System.Collections.Generic;
+
+namespace AdminTemplate.service.Dto.MbDetail
 {
     public class MbDetailItemDto
     {
@@ -11,5 +13,6 @@
         public string Bcontemt { get; set; }
         public double? Score { get; set; }
         public string Type { get; set; }
+        public List<string> LatitudeDetailIds { get; set; }
     }
 }

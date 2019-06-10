@@ -21,6 +21,8 @@ namespace AdminTemplate.DataBase.Models
         public string Type { get; set; }
         public int? Display { get; set; }
         public string LatitudeDetailId { get; set; }
+        public string LatitudeDetailName { get; set; }
+        public string LatitudeDetailIds { get; set; }
 
         public virtual MbDetail Detail { get; set; }
         public virtual LatitudeDetail LatitudeDetail { get; set; }

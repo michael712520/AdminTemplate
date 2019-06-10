@@ -4,6 +4,7 @@ using AdminTemplate.service.Dto.MbDetail;
 using AutoMapper;
 using GlobalConfiguration.Utility;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 
@@ -105,6 +106,19 @@ namespace AdminTemplate.service.Services
                 model.Id = Guid.NewGuid().ToString("N");
                 var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
                 if (m != null) model.Order = m.Order + 1;
+                if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
+                {
+                    model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
+                    var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
+                    if (ls != null)
+                    {
+                        var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
+                        model.LatitudeDetailId = ml?.Id;
+                        model.LatitudeDetailName = ml?.Name;
+                    }
+                }
+
+
                 DbContext.MbDetailItem.Add(model);
             }
             else

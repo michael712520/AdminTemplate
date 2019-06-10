@@ -28,7 +28,7 @@ namespace AdminTemplate.DataBase.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySQL("server=192.168.70.250;uid=root;pwd=jinhe;port=3306;database=question;");
+                optionsBuilder.UseMySQL("server=47.107.238.102;uid=root;pwd=000000;port=3306;database=question;");
             }
         }
 
@@ -39,6 +39,9 @@ namespace AdminTemplate.DataBase.Models
             modelBuilder.Entity<LatitudeDetail>(entity =>
             {
                 entity.ToTable("latitude_detail", "question");
+
+                entity.HasIndex(e => e.ParentId)
+                    .HasName("latitude_detail_ibfk_1");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(32)
@@ -70,6 +73,12 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.Sort)
                     .HasColumnName("sort")
                     .HasColumnType("int(11)");
+
+                entity.HasOne(d => d.Parent)
+                    .WithMany(p => p.InverseParent)
+                    .HasForeignKey(d => d.ParentId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("latitude_detail_ibfk_1");
             });
 
             modelBuilder.Entity<LatitudeDetailItem>(entity =>
@@ -175,6 +184,15 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.LatitudeDetailId)
                     .HasColumnName("latitude_detail_id")
                     .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LatitudeDetailIds)
+                    .HasColumnName("latitudeDetailIds")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LatitudeDetailName)
+                    .HasColumnName("latitude_detail_name")
+                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Order)

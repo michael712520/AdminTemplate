@@ -6,6 +6,7 @@ using AutoMapper;
 using GlobalConfiguration.Utility;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdminTemplate.service.Services
@@ -103,9 +104,10 @@ namespace AdminTemplate.service.Services
         }
         public NetResult GetPicker()
         {
-            var query = DbContext.LatitudeDetail.Include(o => o.MbDetailItem).AsNoTracking();
+            var query = DbContext.LatitudeDetail.Include(o => o.InverseParent).AsNoTracking();
+            query = query.Where(p => string.IsNullOrEmpty(p.ParentId));
             var list = query.OrderByDescending(o => o.Sort).ToList();
-            var data = Mapper.Map<PairChildrenReEntity>(list);
+            var data = Mapper.Map<List<PairChildrenReEntity>>(list);
             return ResponseBodyEntity(data);
         }
     }
