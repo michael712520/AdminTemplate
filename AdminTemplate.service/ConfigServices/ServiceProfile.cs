@@ -3,6 +3,7 @@ using AdminTemplate.service.Dto.baseReEntity;
 using AdminTemplate.service.Dto.LatitudeDetail;
 using AdminTemplate.service.Dto.MbDetail;
 using AutoMapper;
+using Newtonsoft.Json;
 
 namespace AdminTemplate.service.ConfigServices
 {
@@ -11,7 +12,8 @@ namespace AdminTemplate.service.ConfigServices
         public ServiceProfiles()
         {
             CreateMap<MbDetailDto, MbDetail>();
-            CreateMap<MbDetailItemDto, MbDetailItem>();
+            CreateMap<MbDetailItemDto, MbDetailItem>()
+                .ForMember(o => o.LatitudeDetailIds, opt => opt.MapFrom(o => o.LatitudeDetailIds.Count > 0 ? JsonConvert.SerializeObject(o.LatitudeDetailIds) : null));
             CreateMap<LatitudeDetailDto, LatitudeDetail>();
             CreateMap<LatitudeDetail, PairChildrenReEntity>()
                 .ForMember(f => f.Label, opt => opt.MapFrom(f => f.Name))

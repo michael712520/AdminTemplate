@@ -18,10 +18,23 @@ namespace AdminTemplate.service.Services
             var model = query.FirstOrDefault(p => p.Id.Equals(id));
             return ResponseBodyEntity(model);
         }
-        public NetResult Update(MbDetailDto form)
+        public NetResult SaveUpdate(MbDetailDto form)
         {
+            MbDetail model;
+            if (form.Id == null)
+            {
+                model = new MbDetail();
+                model.Id = Guid.NewGuid().ToString("N");
+                model.UserId = form.UserId;
+                model.Title = form.Title;
+                model.Content = form.Content;
+                model = DbContext.MbDetail.Add(model).Entity;
+                DbContext.SaveChanges();
+                return ResponseBodyEntity(model);
+            }
+
             var query = DbContext.MbDetail.AsNoTracking();
-            var model = query.FirstOrDefault(p => p.Id.Equals(form.Id));
+            model = query.FirstOrDefault(p => p.Id.Equals(form.Id));
             if (model != null)
             {
                 model.Title = form.Title;
@@ -35,6 +48,19 @@ namespace AdminTemplate.service.Services
                 return ResponseBodyEntity("", EnumResult.Error, "id未找到");
             }
         }
+
+        public NetResult Delete(string id)
+        {
+            var model = DbContext.MbDetail.FirstOrDefault(p => p.Id.Equals(id));
+            if (model != null)
+            {
+                DbContext.MbDetail.Remove(model);
+                DbContext.SaveChanges();
+                return ResponseBodyEntity();
+            }
+            return ResponseBodyEntity("", EnumResult.Error, "id未找到");
+        }
+
         public NetResult UpdateMbDetail(UpdateMbDetailDto form)
         {
             var model = DbContext.MbDetailItem.FirstOrDefault(p =>
@@ -64,7 +90,7 @@ namespace AdminTemplate.service.Services
             return ResponseBodyEntity(new { model, model2 });
 
         }
-        public NetResult Delete(string id)
+        public NetResult DeleteItem(string id)
         {
 
             var model = DbContext.MbDetailItem.FirstOrDefault(p => p.Id.Equals(id));
@@ -117,12 +143,27 @@ namespace AdminTemplate.service.Services
                         model.LatitudeDetailName = ml?.Name;
                     }
                 }
+                else
+                {
+                    model.LatitudeDetailIds = null;
+                }
 
 
                 DbContext.MbDetailItem.Add(model);
             }
             else
             {
+                if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
+                {
+                    model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
+                    var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
+                    if (ls != null)
+                    {
+                        var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
+                        model.LatitudeDetailId = ml?.Id;
+                        model.LatitudeDetailName = ml?.Name;
+                    }
+                }
                 DbContext.MbDetailItem.Update(model);
 
             }

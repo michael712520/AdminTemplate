@@ -48,7 +48,8 @@ namespace AdminTemplate
                 {
                     policy.AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
             services.AddDbContext<questionContext>(o =>

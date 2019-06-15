@@ -19,10 +19,10 @@ namespace AdminTemplate.Controllers
         {
             return _service.Get(id);
         }
-        [HttpPost, Route("Update")]
-        public NetResult Update([FromBody]MbDetailDto form)
+        [HttpPost, Route("SaveUpdate")]
+        public NetResult SaveUpdate([FromBody]MbDetailDto form)
         {
-            return _service.Update(form);
+            return _service.SaveUpdate(form);
         }
         [HttpPost, Route("UpdateMbDetail")]
         public NetResult UpdateMbDetail([FromBody]UpdateMbDetailDto form)
@@ -35,7 +35,11 @@ namespace AdminTemplate.Controllers
         {
             return _service.Delete(id);
         }
-
+        [HttpPost, Route("DeleteItem/{id}")]
+        public NetResult DeleteItem(string id)
+        {
+            return _service.DeleteItem(id);
+        }
         [HttpGet, Route("GetList")]
         public NetResult GetList(string userId, PaginationStartAndLengthFilter filter)
         {
