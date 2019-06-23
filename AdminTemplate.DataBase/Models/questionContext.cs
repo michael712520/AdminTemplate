@@ -17,6 +17,7 @@ namespace AdminTemplate.DataBase.Models
 
         public virtual DbSet<LatitudeDetail> LatitudeDetail { get; set; }
         public virtual DbSet<LatitudeDetailItem> LatitudeDetailItem { get; set; }
+        public virtual DbSet<LatitudeDetailTwo> LatitudeDetailTwo { get; set; }
         public virtual DbSet<MbDetail> MbDetail { get; set; }
         public virtual DbSet<MbDetailItem> MbDetailItem { get; set; }
         public virtual DbSet<QtDetail> QtDetail { get; set; }
@@ -106,6 +107,51 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.Score)
                     .HasColumnName("score")
                     .HasColumnType("double(11,2)");
+            });
+
+            modelBuilder.Entity<LatitudeDetailTwo>(entity =>
+            {
+                entity.ToTable("latitude_detail_two", "question");
+
+                entity.HasIndex(e => e.ParentId)
+                    .HasName("latitude_detail_ibfk_1");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.BaseScore)
+                    .HasColumnName("base_score")
+                    .HasColumnType("double(11,2)");
+
+                entity.Property(e => e.Coefficient)
+                    .HasColumnName("coefficient")
+                    .HasColumnType("double(11,2)");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ParentId)
+                    .HasColumnName("parent_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Score)
+                    .HasColumnName("score")
+                    .HasColumnType("double(11,2)");
+
+                entity.Property(e => e.Sort)
+                    .HasColumnName("sort")
+                    .HasColumnType("int(11)");
+
+                entity.HasOne(d => d.Parent)
+                    .WithMany(p => p.LatitudeDetailTwo)
+                    .HasForeignKey(d => d.ParentId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("latitude_detail_two_ibfk_1");
             });
 
             modelBuilder.Entity<MbDetail>(entity =>

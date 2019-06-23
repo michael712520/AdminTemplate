@@ -8,6 +8,7 @@ namespace AdminTemplate.DataBase.Models
         public LatitudeDetail()
         {
             InverseParent = new HashSet<LatitudeDetail>();
+            LatitudeDetailTwo = new HashSet<LatitudeDetailTwo>();
             MbDetailItem = new HashSet<MbDetailItem>();
         }
 
@@ -21,6 +22,7 @@ namespace AdminTemplate.DataBase.Models
 
         public virtual LatitudeDetail Parent { get; set; }
         public virtual ICollection<LatitudeDetail> InverseParent { get; set; }
+        public virtual ICollection<LatitudeDetailTwo> LatitudeDetailTwo { get; set; }
         public virtual ICollection<MbDetailItem> MbDetailItem { get; set; }
     }
 }
