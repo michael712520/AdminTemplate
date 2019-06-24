@@ -10,5 +10,6 @@ namespace AdminTemplate.DataBase.Models
         public double? Score { get; set; }
         public double? Coefficient { get; set; }
         public double? BaseScore { get; set; }
+        public string DetailItems { get; set; }
     }
 }

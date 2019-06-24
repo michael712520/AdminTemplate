@@ -99,6 +99,10 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("coefficient")
                     .HasColumnType("double(11,2)");
 
+                entity.Property(e => e.DetailItems)
+                    .HasColumnName("detailItems")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ParentId)
                     .HasColumnName("parent_id")
                     .HasMaxLength(32)
