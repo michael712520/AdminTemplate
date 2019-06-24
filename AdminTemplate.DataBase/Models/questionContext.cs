@@ -150,12 +150,6 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.Sort)
                     .HasColumnName("sort")
                     .HasColumnType("int(11)");
-
-                entity.HasOne(d => d.Parent)
-                    .WithMany(p => p.LatitudeDetailTwo)
-                    .HasForeignKey(d => d.ParentId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("latitude_detail_two_ibfk_1");
             });
 
             modelBuilder.Entity<MbDetail>(entity =>

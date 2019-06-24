@@ -12,7 +12,5 @@ namespace AdminTemplate.DataBase.Models
         public double? BaseScore { get; set; }
         public string Name { get; set; }
         public int? Sort { get; set; }
-
-        public virtual LatitudeDetail Parent { get; set; }
     }
 }
