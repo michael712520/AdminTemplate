@@ -23,6 +23,7 @@ namespace AdminTemplate.DataBase.Models
         public string LatitudeDetailId { get; set; }
         public string LatitudeDetailName { get; set; }
         public string LatitudeDetailIds { get; set; }
+        public string PageInfo { get; set; }
 
         public virtual MbDetail Detail { get; set; }
         public virtual LatitudeDetail LatitudeDetail { get; set; }

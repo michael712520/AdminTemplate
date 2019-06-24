@@ -2,6 +2,7 @@
 using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace AdminTemplate.Controllers
 {
@@ -55,6 +56,12 @@ namespace AdminTemplate.Controllers
         public NetResult GetListItem(string detailId)
         {
             return _service.GetListItem(detailId);
+        }
+        [HttpPost, Route("ListSaveItem")]
+        public NetResult ListSaveItem([FromBody]List<MbDetailItemDto> list)
+        {
+
+            return _service.ListSaveItem(list);
         }
         [HttpPost, Route("SaveItem")]
         public NetResult SaveItem([FromBody]MbDetailItemDto form)

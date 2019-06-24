@@ -13,6 +13,7 @@ namespace AdminTemplate.service.Dto.MbDetail
         public string Bcontemt { get; set; }
         public double? Score { get; set; }
         public string Type { get; set; }
+        public string PageInfo { get; set; }
         public List<string> LatitudeDetailIds { get; set; }
     }
 }

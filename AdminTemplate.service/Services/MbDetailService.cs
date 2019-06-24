@@ -6,6 +6,7 @@ using GlobalConfiguration.Utility;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdminTemplate.service.Services
@@ -123,6 +124,59 @@ namespace AdminTemplate.service.Services
             var list = DbContext.MbDetailItem.AsNoTracking().OrderBy(o => o.Order).Where(p => p.DetailId.Equals(detailId)).ToList();
 
             return ResponseBodyEntity(list);
+        }
+
+        public NetResult ListSaveItem(List<MbDetailItemDto> list)
+        {
+            list.ForEach(this.UpdateSaveItem);
+            DbContext.SaveChanges();
+            return ResponseBodyEntity();
+        }
+
+        public void UpdateSaveItem(MbDetailItemDto form)
+        {
+            MbDetailItem model = Mapper.Map<MbDetailItem>(form);
+            if (form.Id == null)
+            {
+                model.Id = Guid.NewGuid().ToString("N");
+                var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
+                if (m != null) model.Order = m.Order + 1;
+                if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
+                {
+                    model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
+                    var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
+                    if (ls != null)
+                    {
+                        var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
+                        model.LatitudeDetailId = ml?.Id;
+                        model.LatitudeDetailName = ml?.Name;
+                    }
+                }
+                else
+                {
+                    model.LatitudeDetailIds = null;
+                }
+
+
+                DbContext.MbDetailItem.Add(model);
+            }
+            else
+            {
+                if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
+                {
+                    model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
+                    var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
+                    if (ls != null)
+                    {
+                        var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
+                        model.LatitudeDetailId = ml?.Id;
+                        model.LatitudeDetailName = ml?.Name;
+                    }
+                }
+                DbContext.MbDetailItem.Update(model);
+
+            }
+
         }
         public NetResult SaveItem(MbDetailItemDto form)
         {

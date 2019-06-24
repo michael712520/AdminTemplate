@@ -245,6 +245,10 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("order")
                     .HasColumnType("int(255)");
 
+                entity.Property(e => e.PageInfo)
+                    .HasColumnName("pageInfo")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Score).HasColumnType("double(11,0)");
 
                 entity.Property(e => e.State)
