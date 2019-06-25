@@ -21,6 +21,7 @@ namespace AdminTemplate.service.Services
             {
                 var model = Mapper.Map<LatitudeDetail>(from);
                 model.Id = Guid.NewGuid().ToString("N");
+                model.MbDetailId = from.MbDetailId;
                 DbContext.LatitudeDetail.Add(model);
                 DbContext.SaveChanges();
                 return ResponseBodyEntity();

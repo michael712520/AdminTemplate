@@ -1,4 +1,4 @@
-﻿using AdminTemplate.service.Dto.LatitudeDetail;
+﻿using AdminTemplate.service.Dto.LatitudeDetailItem;
 using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
@@ -6,16 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace AdminTemplate.Controllers
 {
     [Route("api/[controller]")]
-    public class LatitudeDetailTwoController : ControllerBase
+    public class LatitudeDetailItemController : ControllerBase
     {
-        private readonly LatitudeDetailTwoService _service;
+        private readonly LatitudeDetailItemService _service;
 
-        public LatitudeDetailTwoController(LatitudeDetailTwoService service)
+
+
+        public LatitudeDetailItemController(LatitudeDetailItemService service)
         {
             _service = service;
         }
         [HttpPost, Route("Add")]
-        public NetResult Add([FromBody]LatitudeDetailDto model)
+        public NetResult Add([FromBody]LatitudeDetailItemDto model)
         {
 
 
@@ -27,7 +29,7 @@ namespace AdminTemplate.Controllers
             return _service.Delete(id);
         }
         [HttpPost, Route("Update")]
-        public NetResult Update([FromBody]LatitudeDetailDto model)
+        public NetResult Update([FromBody]LatitudeDetailItemDto model)
         {
             return _service.Update(model);
         }
@@ -37,9 +39,9 @@ namespace AdminTemplate.Controllers
             return _service.List(id, filter);
         }
         [HttpGet, Route("GetPicker")]
-        public NetResult GetPicker()
+        public NetResult GetPicker(string id)
         {
-            return _service.GetPicker();
+            return _service.GetPicker(id);
         }
     }
 }

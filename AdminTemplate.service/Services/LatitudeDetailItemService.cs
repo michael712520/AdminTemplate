@@ -1,7 +1,7 @@
 ﻿using AdminTemplate.DataBase.Models;
 using AdminTemplate.service.BaseServices;
 using AdminTemplate.service.Dto.baseReEntity;
-using AdminTemplate.service.Dto.LatitudeDetail;
+using AdminTemplate.service.Dto.LatitudeDetailItem;
 using AutoMapper;
 using GlobalConfiguration.Utility;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +11,10 @@ using System.Linq;
 
 namespace AdminTemplate.service.Services
 {
-    public class LatitudeDetailTwoService : BaseService
+    public class LatitudeDetailItemService : BaseService
     {
-        public NetResult Add(LatitudeDetailDto from)
+
+        public NetResult Add(LatitudeDetailItemDto from)
         {
             if (from.Id != null)
             {
@@ -21,9 +22,10 @@ namespace AdminTemplate.service.Services
             }
             else
             {
-                var model = Mapper.Map<LatitudeDetailTwo>(from);
+                var model = Mapper.Map<LatitudeDetailItem>(from);
                 model.Id = Guid.NewGuid().ToString("N");
-                DbContext.LatitudeDetailTwo.Add(model);
+                model.MbDetailId = from.MbDetailId;
+                DbContext.LatitudeDetailItem.Add(model);
                 DbContext.SaveChanges();
                 return ResponseBodyEntity();
             }
@@ -34,10 +36,10 @@ namespace AdminTemplate.service.Services
         public NetResult Delete(string id)
         {
 
-            var model = DbContext.LatitudeDetailTwo.FirstOrDefault(p => p.Id.Equals(id));
+            var model = DbContext.LatitudeDetailItem.FirstOrDefault(p => p.Id.Equals(id));
             if (model != null)
             {
-                DbContext.LatitudeDetailTwo.Remove(model);
+                DbContext.LatitudeDetailItem.Remove(model);
                 DbContext.SaveChanges();
                 return ResponseBodyEntity();
             }
@@ -48,15 +50,11 @@ namespace AdminTemplate.service.Services
 
 
         }
-        public NetResult Update(LatitudeDetailDto model)
+        public NetResult Update(LatitudeDetailItemDto model)
         {
-            var m = DbContext.LatitudeDetailTwo.FirstOrDefault(p => p.Id.Equals(model.Id));
+            var m = DbContext.LatitudeDetailItem.FirstOrDefault(p => p.Id.Equals(model.Id));
             if (m != null)
             {
-                if (model.ParentId != null)
-                {
-                    m.ParentId = model.ParentId;
-                }
                 if (model.Name != null)
                 {
                     m.Name = model.Name;
@@ -77,7 +75,7 @@ namespace AdminTemplate.service.Services
                 {
                     m.Sort = model.Sort;
                 }
-                DbContext.LatitudeDetailTwo.Update(m);
+                DbContext.LatitudeDetailItem.Update(m);
                 DbContext.SaveChanges();
                 return ResponseBodyEntity();
             }
@@ -86,29 +84,26 @@ namespace AdminTemplate.service.Services
         }
         public NetResult List(string id, PaginationStartAndLengthFilter filter)
         {
-            var query = DbContext.LatitudeDetailTwo.AsNoTracking();
+            var query = DbContext.LatitudeDetailItem.AsNoTracking();
 
             if (filter.Keywords != null)
             {
                 query = query.Where(p => p.Name.Contains(filter.Keywords));
             }
 
-            if (id != null)
-            {
-                query = query.Where(p => p.ParentId.Equals(id));
-            }
+
 
             var count = query.Count();
             var list = query.Skip(filter.Start).Take(filter.Length).OrderByDescending(o => o.Sort).ToList();
             return ResponseBodyEntity(list, count);
         }
-        public NetResult GetPicker()
+
+        public NetResult GetPicker(string id)
         {
-            var query = DbContext.LatitudeDetailTwo.AsNoTracking();
-            query = query.Where(p => string.IsNullOrEmpty(p.ParentId));
-            var list = query.OrderByDescending(o => o.Sort).ToList();
-            var data = Mapper.Map<List<PairChildrenReEntity>>(list);
+            var list = DbContext.LatitudeDetailItem.AsNoTracking().Where(p => p.MbDetailId.Equals(id)).ToList();
+            var data = Mapper.Map<List<PairReEntity>>(list);
             return ResponseBodyEntity(data);
         }
+
     }
 }

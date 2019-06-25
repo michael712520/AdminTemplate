@@ -19,5 +19,10 @@ namespace AdminTemplate.Controllers
         {
             return _service.Login(sysUserLogin);
         }
+        [HttpPost, Route("authorization")]
+        public NetResult Authorization(string kyeId)
+        {
+            return _service.Authorization(kyeId);
+        }
     }
 }

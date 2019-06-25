@@ -41,7 +41,7 @@ namespace AdminTemplate.Controllers
         [HttpGet, Route("GetPicker")]
         public NetResult GetPicker()
         {
-            return _service.GetPicker();
+            return null;
         }
     }
 }

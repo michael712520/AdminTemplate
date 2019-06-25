@@ -93,5 +93,14 @@ namespace GlobalConfiguration.@base
 
             return DefaultConnection.GetSection("ConnectionStrings").GetSection(name).Value;
         }
+        public static IConfigurationSection GetAppSettings(string name = "ConnectionStrings")
+        {
+            if (DefaultConnection == null)
+            {
+                throw new ArgumentNullException("未发现默认数据库连接");
+            }
+
+            return DefaultConnection.GetSection(name);
+        }
     }
 }
