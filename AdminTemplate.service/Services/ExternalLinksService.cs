@@ -40,7 +40,12 @@ namespace AdminTemplate.service.Services
 
             DbContext.QtDetail.Add(qtDetail);
             DbContext.SaveChanges();
-            return ResponseBodyEntity("https://www.iu1314.com/#/ExternalLinks/wj?");
+            return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId=${qtDetail.Id}");
+        }
+
+        public NetResult Get(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard)
+        {
+            return ResponseBodyEntity();
         }
     }
 }
