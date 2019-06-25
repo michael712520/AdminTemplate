@@ -8,6 +8,7 @@ namespace AdminTemplate.DataBase.Models
         public LatitudeDetail()
         {
             MbDetailItem = new HashSet<MbDetailItem>();
+            QtLatitudeDetail = new HashSet<QtLatitudeDetail>();
         }
 
         public string Id { get; set; }
@@ -20,5 +21,6 @@ namespace AdminTemplate.DataBase.Models
         public string Relationship { get; set; }
 
         public virtual ICollection<MbDetailItem> MbDetailItem { get; set; }
+        public virtual ICollection<QtLatitudeDetail> QtLatitudeDetail { get; set; }
     }
 }

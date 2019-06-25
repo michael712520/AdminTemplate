@@ -8,6 +8,7 @@ namespace AdminTemplate.DataBase.Models
         public QtDetail()
         {
             QtDetailItem = new HashSet<QtDetailItem>();
+            QtLatitudeDetail = new HashSet<QtLatitudeDetail>();
         }
 
         public string Id { get; set; }
@@ -24,5 +25,6 @@ namespace AdminTemplate.DataBase.Models
         public string StudentIdCard { get; set; }
 
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
+        public virtual ICollection<QtLatitudeDetail> QtLatitudeDetail { get; set; }
     }
 }

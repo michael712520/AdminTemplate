@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>AdminTemplate</name>
+  </assembly>
+  <members>
+    <member name="T:AdminTemplate.Controllers.ExternalLinksController">
+      <summary>
+        外部链接接口
+      </summary>
+    </member>
+    <member name="M:AdminTemplate.Controllers.ExternalLinksController.#ctor(AdminTemplate.service.Services.ExternalLinksService)">
+      <summary>
+
+      </summary>
+      <param name="service"></param>
+    </member>
+    <member name="M:AdminTemplate.Controllers.ExternalLinksController.Add(System.String,System.String,System.String,System.String)">
+      <summary>
+        导师给某个学员做评估的链接
+      </summary>
+      <param name="mbQuestionId">问卷id</param>
+      <param name="teacherIdCard">老师身份证</param>
+      <param name="foreignType">类型</param>
+      <param name="studentIdCard">学生身份证</param>
+      <returns></returns>
+    </member>
+    <member name="M:AdminTemplate.Controllers.ExternalLinksController.GetStudentList(System.String)">
+      <summary>
+        查看某个学员所有评估的列表链接
+      </summary>
+      <param name="studentIdCard">学生身份证</param>
+      <returns></returns>
+    </member>
+    <member name="M:AdminTemplate.Controllers.ExternalLinksController.StudentAndMbQuestion(System.String,System.String)">
+      <summary>
+        查看某个学员具体某个评估的接口链接
+      </summary>
+      <param name="studentIdCard">学生身份证</param>
+      <param name="mbQuestionId">问卷id</param>
+      <returns></returns>
+    </member>
+    <member name="M:AdminTemplate.Controllers.ExternalLinksController.QuestionResult(System.String,System.String)">
+      <summary>
+        调取某个学员具体某个评估的结果页面查询接口（非链接）
+      </summary>
+      <param name="studentIdCard"></param>
+      <param name="mbQuestionId"></param>
+      <returns></returns>
+    </member>
+  </members>
+</doc>

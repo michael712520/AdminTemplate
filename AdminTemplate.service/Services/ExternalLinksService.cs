@@ -40,12 +40,30 @@ namespace AdminTemplate.service.Services
 
             DbContext.QtDetail.Add(qtDetail);
             DbContext.SaveChanges();
-            return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId=${qtDetail.Id}");
+            return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}");
         }
 
-        public NetResult Get(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard)
+        public NetResult GetStudentList(string studentIdCard)
         {
-            return ResponseBodyEntity();
+
+            return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentList?studentIdCard={studentIdCard}");
+        }
+        public NetResult StudentAndMbQuestion(string studentIdCard, string mbQuestionId)
+        {
+
+            return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentAndMbQuestion?studentIdCard={studentIdCard}&mbQuestionId={mbQuestionId}");
+        }
+
+        public NetResult QuestionResult(string studentIdCard, string mbQuestionId)
+        {
+            var firstOrDefault = DbContext.QtDetail.Include(o => o.QtLatitudeDetail).AsNoTracking().FirstOrDefault(p => p.StudentIdCard.Equals(studentIdCard) && p.MbDetailId.Equals(mbQuestionId));
+            if (firstOrDefault != null)
+            {
+                return ResponseBodyEntity(firstOrDefault);
+            }
+            else { return ResponseBodyEntity("", EnumResult.Error, "查询结果为空"); }
+
+
         }
     }
 }

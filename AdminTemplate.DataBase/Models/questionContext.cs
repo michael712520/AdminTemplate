@@ -21,6 +21,7 @@ namespace AdminTemplate.DataBase.Models
         public virtual DbSet<MbDetailItem> MbDetailItem { get; set; }
         public virtual DbSet<QtDetail> QtDetail { get; set; }
         public virtual DbSet<QtDetailItem> QtDetailItem { get; set; }
+        public virtual DbSet<QtLatitudeDetail> QtLatitudeDetail { get; set; }
         public virtual DbSet<SysUser> SysUser { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -388,6 +389,47 @@ namespace AdminTemplate.DataBase.Models
                     .HasForeignKey(d => d.QtDetailId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("qt_detail_item_ibfk_3");
+            });
+
+            modelBuilder.Entity<QtLatitudeDetail>(entity =>
+            {
+                entity.ToTable("qt_latitude_detail", "question");
+
+                entity.HasIndex(e => e.LatitudeDetailId)
+                    .HasName("latitude_detail_id");
+
+                entity.HasIndex(e => e.QtDetailId)
+                    .HasName("qt_detail_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.LatitudeDetailId)
+                    .HasColumnName("latitude_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.QtDetailId)
+                    .HasColumnName("qt_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Score)
+                    .HasColumnName("score")
+                    .HasColumnType("double(11,0)");
+
+                entity.HasOne(d => d.LatitudeDetail)
+                    .WithMany(p => p.QtLatitudeDetail)
+                    .HasForeignKey(d => d.LatitudeDetailId)
+                    .HasConstraintName("qt_latitude_detail_ibfk_1");
+
+                entity.HasOne(d => d.QtDetail)
+                    .WithMany(p => p.QtLatitudeDetail)
+                    .HasForeignKey(d => d.QtDetailId)
+                    .HasConstraintName("qt_latitude_detail_ibfk_2");
             });
 
             modelBuilder.Entity<SysUser>(entity =>
