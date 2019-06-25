@@ -17,9 +17,17 @@ namespace AdminTemplate.service.ConfigServices
             CreateMap<LatitudeDetailDto, LatitudeDetail>();
             CreateMap<LatitudeDetail, PairChildrenReEntity>()
                 .ForMember(f => f.Label, opt => opt.MapFrom(f => f.Name))
-                .ForMember(f => f.Value, opt => opt.MapFrom(f => f.Id))
-                .ForMember(f => f.Children, opt => opt.MapFrom(f => f.InverseParent));
+                .ForMember(f => f.Value, opt => opt.MapFrom(f => f.Id));
             CreateMap<LatitudeDetail, PairReEntity>()
+               .ForMember(f => f.Label, opt => opt.MapFrom(f => f.Name))
+               .ForMember(f => f.Value, opt => opt.MapFrom(f => f.Id));
+
+            CreateMap<LatitudeDetailDto, LatitudeDetailTwo>();
+            CreateMap<LatitudeDetailTwo, PairChildrenReEntity>()
+                .ForMember(f => f.Label, opt => opt.MapFrom(f => f.Name))
+                .ForMember(f => f.Value, opt => opt.MapFrom(f => f.Id))
+              ;
+            CreateMap<LatitudeDetailTwo, PairReEntity>()
                 .ForMember(f => f.Label, opt => opt.MapFrom(f => f.Name))
                 .ForMember(f => f.Value, opt => opt.MapFrom(f => f.Id));
         }
