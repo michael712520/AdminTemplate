@@ -5,11 +5,6 @@ namespace AdminTemplate.DataBase.Models
 {
     public partial class MbDetailItem
     {
-        public MbDetailItem()
-        {
-            QtDetailItem = new HashSet<QtDetailItem>();
-        }
-
         public string Id { get; set; }
         public string DetailId { get; set; }
         public string Title { get; set; }
@@ -27,6 +22,5 @@ namespace AdminTemplate.DataBase.Models
 
         public virtual MbDetail Detail { get; set; }
         public virtual LatitudeDetail LatitudeDetail { get; set; }
-        public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
     }
 }

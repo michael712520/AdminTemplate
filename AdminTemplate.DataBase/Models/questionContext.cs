@@ -17,7 +17,6 @@ namespace AdminTemplate.DataBase.Models
 
         public virtual DbSet<LatitudeDetail> LatitudeDetail { get; set; }
         public virtual DbSet<LatitudeDetailItem> LatitudeDetailItem { get; set; }
-        public virtual DbSet<LatitudeDetailTwo> LatitudeDetailTwo { get; set; }
         public virtual DbSet<MbDetail> MbDetail { get; set; }
         public virtual DbSet<MbDetailItem> MbDetailItem { get; set; }
         public virtual DbSet<QtDetail> QtDetail { get; set; }
@@ -41,9 +40,6 @@ namespace AdminTemplate.DataBase.Models
             {
                 entity.ToTable("latitude_detail", "question");
 
-                entity.HasIndex(e => e.ParentId)
-                    .HasName("latitude_detail_ibfk_1");
-
                 entity.Property(e => e.Id)
                     .HasMaxLength(32)
                     .IsUnicode(false)
@@ -57,14 +53,18 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("coefficient")
                     .HasColumnType("double(11,2)");
 
+                entity.Property(e => e.MbDetailId)
+                    .HasColumnName("mb_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ParentId)
-                    .HasColumnName("parent_id")
-                    .HasMaxLength(32)
+                entity.Property(e => e.Relationship)
+                    .HasColumnName("relationship")
                     .IsUnicode(false);
 
                 entity.Property(e => e.Score)
@@ -74,12 +74,6 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.Sort)
                     .HasColumnName("sort")
                     .HasColumnType("int(11)");
-
-                entity.HasOne(d => d.Parent)
-                    .WithMany(p => p.InverseParent)
-                    .HasForeignKey(d => d.ParentId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("latitude_detail_ibfk_1");
             });
 
             modelBuilder.Entity<LatitudeDetailItem>(entity =>
@@ -99,47 +93,13 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("coefficient")
                     .HasColumnType("double(11,2)");
 
-                entity.Property(e => e.DetailItems)
-                    .HasColumnName("detailItems")
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ParentId)
-                    .HasColumnName("parent_id")
+                entity.Property(e => e.MbDetailId)
+                    .HasColumnName("mb_detail_id")
                     .HasMaxLength(32)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Score)
-                    .HasColumnName("score")
-                    .HasColumnType("double(11,2)");
-            });
-
-            modelBuilder.Entity<LatitudeDetailTwo>(entity =>
-            {
-                entity.ToTable("latitude_detail_two", "question");
-
-                entity.HasIndex(e => e.ParentId)
-                    .HasName("latitude_detail_ibfk_1");
-
-                entity.Property(e => e.Id)
-                    .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.BaseScore)
-                    .HasColumnName("base_score")
-                    .HasColumnType("double(11,2)");
-
-                entity.Property(e => e.Coefficient)
-                    .HasColumnName("coefficient")
-                    .HasColumnType("double(11,2)");
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
-                    .HasMaxLength(32)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ParentId)
-                    .HasColumnName("parent_id")
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
@@ -150,12 +110,6 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.Sort)
                     .HasColumnName("sort")
                     .HasColumnType("int(11)");
-
-                entity.HasOne(d => d.Parent)
-                    .WithMany(p => p.LatitudeDetailTwo)
-                    .HasForeignKey(d => d.ParentId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("latitude_detail_two_ibfk_1");
             });
 
             modelBuilder.Entity<MbDetail>(entity =>
@@ -295,17 +249,49 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("content")
                     .IsUnicode(false);
 
+                entity.Property(e => e.Display)
+                    .HasColumnName("display")
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.ForeignType)
+                    .HasColumnName("foreignType")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MbDetailId)
+                    .HasColumnName("mb_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Order)
                     .HasColumnName("order")
                     .HasColumnType("int(255)");
 
+                entity.Property(e => e.Score).HasColumnType("double(11,0)");
+
                 entity.Property(e => e.State)
                     .HasColumnName("state")
-                    .HasColumnType("int(255)");
+                    .HasColumnType("int(255)")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.StudentIdCard)
+                    .HasColumnName("studentIdCard")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TeacherIdCard)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Title)
                     .HasColumnName("title")
                     .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("userId")
+                    .HasMaxLength(32)
                     .IsUnicode(false);
             });
 
@@ -313,11 +299,14 @@ namespace AdminTemplate.DataBase.Models
             {
                 entity.ToTable("qt_detail_item", "question");
 
-                entity.HasIndex(e => e.MbDetailItemId)
-                    .HasName("mb_detail_item_id");
+                entity.HasIndex(e => e.LatitudeDetailItemId)
+                    .HasName("latitude_detail_id");
+
+                entity.HasIndex(e => e.MbDetailId)
+                    .HasName("mb_detail_item_ibfk_1");
 
                 entity.HasIndex(e => e.QtDetailId)
-                    .HasName("qt_detail_item_ibfk_1");
+                    .HasName("qt_detail_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -336,14 +325,32 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnType("int(11)")
                     .HasDefaultValueSql("1");
 
-                entity.Property(e => e.MbDetailItemId)
-                    .HasColumnName("mb_detail_item_id")
+                entity.Property(e => e.LatitudeDetailIds)
+                    .HasColumnName("latitudeDetailIds")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LatitudeDetailItemId)
+                    .HasColumnName("latitude_detail_item_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LatitudeDetailItemName)
+                    .HasColumnName("latitude_detail_item_name")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MbDetailId)
+                    .HasColumnName("mb_detail_id")
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Order)
                     .HasColumnName("order")
                     .HasColumnType("int(255)");
+
+                entity.Property(e => e.PageInfo)
+                    .HasColumnName("pageInfo")
+                    .IsUnicode(false);
 
                 entity.Property(e => e.QtDetailId)
                     .HasColumnName("qt_detail_id")
@@ -366,16 +373,21 @@ namespace AdminTemplate.DataBase.Models
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.MbDetailItem)
+                entity.HasOne(d => d.LatitudeDetailItem)
                     .WithMany(p => p.QtDetailItem)
-                    .HasForeignKey(d => d.MbDetailItemId)
+                    .HasForeignKey(d => d.LatitudeDetailItemId)
                     .HasConstraintName("qt_detail_item_ibfk_2");
+
+                entity.HasOne(d => d.MbDetail)
+                    .WithMany(p => p.QtDetailItem)
+                    .HasForeignKey(d => d.MbDetailId)
+                    .HasConstraintName("qt_detail_item_ibfk_4");
 
                 entity.HasOne(d => d.QtDetail)
                     .WithMany(p => p.QtDetailItem)
                     .HasForeignKey(d => d.QtDetailId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("qt_detail_item_ibfk_1");
+                    .HasConstraintName("qt_detail_item_ibfk_3");
             });
 
             modelBuilder.Entity<SysUser>(entity =>

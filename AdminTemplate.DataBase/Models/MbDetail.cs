@@ -8,6 +8,7 @@ namespace AdminTemplate.DataBase.Models
         public MbDetail()
         {
             MbDetailItem = new HashSet<MbDetailItem>();
+            QtDetailItem = new HashSet<QtDetailItem>();
         }
 
         public string Id { get; set; }
@@ -20,5 +21,6 @@ namespace AdminTemplate.DataBase.Models
         public int? Display { get; set; }
 
         public virtual ICollection<MbDetailItem> MbDetailItem { get; set; }
+        public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
     }
 }

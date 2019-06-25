@@ -1,12 +1,10 @@
 ﻿using AdminTemplate.DataBase.Models;
 using AdminTemplate.service.BaseServices;
-using AdminTemplate.service.Dto.baseReEntity;
 using AdminTemplate.service.Dto.LatitudeDetail;
 using AutoMapper;
 using GlobalConfiguration.Utility;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace AdminTemplate.service.Services
@@ -53,10 +51,6 @@ namespace AdminTemplate.service.Services
             var m = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(model.Id));
             if (m != null)
             {
-                if (model.ParentId != null)
-                {
-                    m.ParentId = model.ParentId;
-                }
                 if (model.Name != null)
                 {
                     m.Name = model.Name;
@@ -93,22 +87,12 @@ namespace AdminTemplate.service.Services
                 query = query.Where(p => p.Name.Contains(filter.Keywords));
             }
 
-            if (id != null)
-            {
-                query = query.Where(p => p.ParentId.Equals(id));
-            }
+
 
             var count = query.Count();
             var list = query.Skip(filter.Start).Take(filter.Length).OrderByDescending(o => o.Sort).ToList();
             return ResponseBodyEntity(list, count);
         }
-        public NetResult GetPicker()
-        {
-            var query = DbContext.LatitudeDetail.Include(o => o.InverseParent).AsNoTracking();
-            query = query.Where(p => string.IsNullOrEmpty(p.ParentId));
-            var list = query.OrderByDescending(o => o.Sort).ToList();
-            var data = Mapper.Map<List<PairChildrenReEntity>>(list);
-            return ResponseBodyEntity(data);
-        }
+
     }
 }
