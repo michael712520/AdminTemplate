@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace AdminTemplate.service.Services
@@ -24,8 +25,9 @@ namespace AdminTemplate.service.Services
             MbDetail model;
             if (form.Id == null)
             {
+                System.DateTime startTime = TimeZoneInfo.ConvertTimeToUtc(new System.DateTime(1970, 1, 1));
                 model = new MbDetail();
-                model.Id = Guid.NewGuid().ToString("N");
+                model.Id = (DateTime.Now - startTime).TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
                 model.UserId = form.UserId;
                 model.Title = form.Title;
                 model.Content = form.Content;
