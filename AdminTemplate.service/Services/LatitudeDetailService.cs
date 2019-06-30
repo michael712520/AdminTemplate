@@ -31,7 +31,7 @@ namespace AdminTemplate.service.Services
         }
         public NetResult Get(string id)
         {
-            var model = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(id));
+            var model = DbContext.LatitudeDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(id));
             return ResponseBodyEntity(model);
 
         }

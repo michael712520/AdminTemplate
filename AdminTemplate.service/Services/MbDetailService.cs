@@ -16,7 +16,7 @@ namespace AdminTemplate.service.Services
     {
         public NetResult Get(string id)
         {
-            var query = DbContext.MbDetail.AsNoTracking();
+            var query = DbContext.MbDetail.Include(o => o.MbDetailItem).AsNoTracking();
             var model = query.FirstOrDefault(p => p.Id.Equals(id));
             return ResponseBodyEntity(model);
         }
