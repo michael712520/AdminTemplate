@@ -11,7 +11,7 @@ namespace AdminTemplate.service.Services
 {
     public class ExternalLinksService : BaseService
     {
-        public NetResult Add(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard)
+        public NetResult Add(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard, string callBack)
         {
             var model = DbContext.MbDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(mbQuestionId));
             if (model == null)
@@ -29,6 +29,7 @@ namespace AdminTemplate.service.Services
             qtDetail.TeacherIdCard = teacherIdCard;
             qtDetail.ForeignType = foreignType;
             qtDetail.StudentIdCard = studentIdCard;
+            qtDetail.CallBack = callBack;
             List<QtDetailItem> items = Mapper.Map<List<QtDetailItem>>(model.MbDetailItem);
             items.ForEach(d =>
             {

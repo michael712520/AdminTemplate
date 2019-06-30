@@ -23,6 +23,9 @@ namespace AdminTemplate.DataBase.Models
         public string TeacherIdCard { get; set; }
         public string ForeignType { get; set; }
         public string StudentIdCard { get; set; }
+        public string CallBack { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
 
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
         public virtual ICollection<QtLatitudeDetail> QtLatitudeDetail { get; set; }

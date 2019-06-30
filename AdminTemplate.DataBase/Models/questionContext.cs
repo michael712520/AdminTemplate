@@ -246,9 +246,17 @@ namespace AdminTemplate.DataBase.Models
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
+                entity.Property(e => e.CallBack)
+                    .HasColumnName("callBack")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Content)
                     .HasColumnName("content")
                     .IsUnicode(false);
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnName("create_time")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.Property(e => e.Display)
                     .HasColumnName("display")
@@ -289,6 +297,10 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("title")
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.Property(e => e.UpdateTime)
+                    .HasColumnName("update_time")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.Property(e => e.UserId)
                     .HasColumnName("userId")
