@@ -104,6 +104,10 @@ namespace AdminTemplate.DataBase.Models
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ReturnInfo)
+                    .HasColumnName("returnInfo")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Score)
                     .HasColumnName("score")
                     .HasColumnType("double(11,2)");
@@ -371,6 +375,10 @@ namespace AdminTemplate.DataBase.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Score).HasColumnType("double(11,0)");
+
+                entity.Property(e => e.SelectResult)
+                    .HasColumnName("select_result")
+                    .IsUnicode(false);
 
                 entity.Property(e => e.State)
                     .HasColumnName("state")

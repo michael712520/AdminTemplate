@@ -17,6 +17,7 @@ namespace AdminTemplate.DataBase.Models
         public double? Coefficient { get; set; }
         public double? BaseScore { get; set; }
         public int? Sort { get; set; }
+        public string ReturnInfo { get; set; }
 
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
     }

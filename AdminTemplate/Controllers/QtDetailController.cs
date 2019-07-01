@@ -1,6 +1,8 @@
-﻿using AdminTemplate.service.Services;
+﻿using AdminTemplate.service.Dto.LatitudeDetailItem;
+using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace AdminTemplate.Controllers
 {
@@ -53,6 +55,16 @@ namespace AdminTemplate.Controllers
         public NetResult GetByStudentAndMbDetailId(string studentIdCard, string mbDetailId)
         {
             return _service.GetByStudentAndMbDetailId(studentIdCard, mbDetailId);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        [HttpPost, Route("UpdateQtDetailItem")]
+        public NetResult UpdateQtDetailItem([FromBody]List<LatitudeDetailItemDto> list)
+        {
+            return _service.UpdateQtDetailItem(list);
         }
     }
 }

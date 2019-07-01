@@ -1,6 +1,8 @@
 ﻿using AdminTemplate.service.BaseServices;
+using AdminTemplate.service.Dto.LatitudeDetailItem;
 using GlobalConfiguration.Utility;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdminTemplate.service.Services
@@ -30,6 +32,21 @@ namespace AdminTemplate.service.Services
         {
             var model = DbContext.QtDetail.FirstOrDefault(p => p.StudentIdCard.Equals(studentIdCard) && p.MbDetailId.Equals(mbDetailId));
             return ResponseBodyEntity(model);
+        }
+
+        public NetResult UpdateQtDetailItem(List<LatitudeDetailItemDto> list)
+        {
+            list.ForEach(d =>
+            {
+                var model = DbContext.QtDetailItem.FirstOrDefault(p => p.Id.Equals(d.Id));
+                if (model != null)
+                {
+                    model.SelectResult = d.SelectResult;
+                    DbContext.QtDetailItem.Update(model);
+                }
+            });
+            DbContext.SaveChanges();
+            return ResponseBodyEntity();
         }
     }
 }

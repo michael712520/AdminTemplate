@@ -9,5 +9,6 @@
         public double? Coefficient { get; set; }
         public double? BaseScore { get; set; }
         public int? Sort { get; set; }
+        public string SelectResult { get; set; }
     }
 }
