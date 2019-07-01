@@ -31,5 +31,28 @@ namespace AdminTemplate.Controllers
         {
             return _service.Get(id);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="studentIdCard"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        [HttpGet, Route("GetStudentAll/{studentIdCard}")]
+        public NetResult GetStudentAll(string studentIdCard, PaginationStartAndLengthFilter filter)
+        {
+            return _service.GetStudentAll(studentIdCard, filter);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="studentIdCard"></param>
+        /// <param name="mbDetailId"></param>
+        /// <returns></returns>
+        [HttpGet, Route("GetByStudentAndMbDetailId/{studentIdCard}/{mbDetailId}")]
+        public NetResult GetByStudentAndMbDetailId(string studentIdCard, string mbDetailId)
+        {
+            return _service.GetByStudentAndMbDetailId(studentIdCard, mbDetailId);
+        }
     }
 }

@@ -29,7 +29,12 @@ namespace AdminTemplate.service.Services
 
 
         }
+        public NetResult Get(string id)
+        {
+            var model = DbContext.LatitudeDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(id));
+            return ResponseBodyEntity(model);
 
+        }
         public NetResult Delete(string id)
         {
 
@@ -71,6 +76,10 @@ namespace AdminTemplate.service.Services
                 if (model.Sort != null)
                 {
                     m.Sort = model.Sort;
+                }
+                if (model.Relationship != null)
+                {
+                    m.Relationship = model.Relationship;
                 }
                 DbContext.LatitudeDetail.Update(m);
                 DbContext.SaveChanges();

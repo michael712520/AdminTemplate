@@ -23,6 +23,12 @@ namespace AdminTemplate.Controllers
 
             return _service.Add(model);
         }
+        [HttpGet, Route("Get")]
+        public NetResult Get(string id)
+        {
+            return _service.Get(id);
+
+        }
         [HttpPost, Route("Delete/{id}")]
         public NetResult Delete(string id)
         {

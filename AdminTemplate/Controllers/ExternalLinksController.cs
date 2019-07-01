@@ -28,10 +28,10 @@ namespace AdminTemplate.Controllers
         /// <param name="foreignType">类型</param>
         /// <param name="studentIdCard">学生身份证</param>
         /// <returns></returns>
-        [HttpPost, Route("Add/{mbQuestionId}/{teacherIdCard}/{foreignType}/{studentIdCard}")]
-        public NetResult Add(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard)
+        [HttpPost, Route("Add/{mbQuestionId}/{teacherIdCard}/{foreignType}/{studentIdCard}/{callBack}")]
+        public NetResult Add(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard, string callBack)
         {
-            return _service.Add(mbQuestionId, teacherIdCard, foreignType, studentIdCard);
+            return _service.Add(mbQuestionId, teacherIdCard, foreignType, studentIdCard, callBack);
         }
 
         /// <summary>
