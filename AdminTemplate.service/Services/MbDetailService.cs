@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace AdminTemplate.service.Services
@@ -27,7 +26,7 @@ namespace AdminTemplate.service.Services
             {
                 System.DateTime startTime = TimeZoneInfo.ConvertTimeToUtc(new System.DateTime(1970, 1, 1));
                 model = new MbDetail();
-                model.Id = (DateTime.Now - startTime).TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
+                model.Id = DateTime.Now.Ticks.ToString();
                 model.UserId = form.UserId;
                 model.Title = form.Title;
                 model.Content = form.Content;
@@ -130,8 +129,12 @@ namespace AdminTemplate.service.Services
 
         public NetResult ListSaveItem(List<MbDetailItemDto> list)
         {
-            list.ForEach(this.UpdateSaveItem);
-            DbContext.SaveChanges();
+            if (list != null)
+            {
+                list.ForEach(this.UpdateSaveItem);
+                DbContext.SaveChanges();
+                return ResponseBodyEntity();
+            }
             return ResponseBodyEntity();
         }
 

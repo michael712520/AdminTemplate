@@ -82,5 +82,12 @@
             <param name="mbDetailId"></param>
             <returns></returns>
         </member>
+        <member name="M:AdminTemplate.Controllers.QtDetailController.UpdateAll(AdminTemplate.service.Dto.QtDetailItem.QtDetailItemFrom)">
+            <summary>
+            
+            </summary>
+            <param name="from"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

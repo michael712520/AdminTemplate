@@ -1,4 +1,5 @@
-﻿using AdminTemplate.service.Services;
+﻿using AdminTemplate.service.Dto.QtDetailItem;
+using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,6 +54,16 @@ namespace AdminTemplate.Controllers
         public NetResult GetByStudentAndMbDetailId(string studentIdCard, string mbDetailId)
         {
             return _service.GetByStudentAndMbDetailId(studentIdCard, mbDetailId);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from"></param>
+        /// <returns></returns>
+        [HttpPost, Route("UpdateAll")]
+        public NetResult UpdateAll([FromBody]QtDetailItemFrom from)
+        {
+            return _service.UpdateAll(from);
         }
     }
 }

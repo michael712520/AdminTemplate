@@ -1,6 +1,10 @@
-﻿using AdminTemplate.service.BaseServices;
+﻿using AdminTemplate.DataBase.Models;
+using AdminTemplate.service.BaseServices;
+using AdminTemplate.service.Dto.QtDetailItem;
+using AutoMapper;
 using GlobalConfiguration.Utility;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdminTemplate.service.Services
@@ -30,6 +34,14 @@ namespace AdminTemplate.service.Services
         {
             var model = DbContext.QtDetail.FirstOrDefault(p => p.StudentIdCard.Equals(studentIdCard) && p.MbDetailId.Equals(mbDetailId));
             return ResponseBodyEntity(model);
+        }
+
+        public NetResult UpdateAll(QtDetailItemFrom from)
+        {
+            var list = Mapper.Map<List<QtDetailItem>>(from.List);
+            DbContext.QtDetailItem.UpdateRange(list);
+            DbContext.SaveChanges();
+            return ResponseBodyEntity();
         }
     }
 }
