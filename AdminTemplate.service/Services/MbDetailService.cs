@@ -65,6 +65,11 @@ namespace AdminTemplate.service.Services
 
         public NetResult UpdateMbDetail(UpdateMbDetailDto form)
         {
+	        if (form==null)
+	        {
+				return ResponseBodyEntity("",EnumResult.Error,"提交的值为空");
+
+			}
             var model = DbContext.MbDetailItem.FirstOrDefault(p =>
                 p.DetailId.Equals(form.DetailId) && p.Order == form.Sort);
             MbDetailItem model2 = null;

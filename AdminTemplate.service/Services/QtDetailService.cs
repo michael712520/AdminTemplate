@@ -36,12 +36,30 @@ namespace AdminTemplate.service.Services
             return ResponseBodyEntity(model);
         }
 
-        public NetResult UpdateAll(QtDetailItemFrom from)
+        public NetResult UpdateSelectResult(List<QtDetailItemDto> listParam)
         {
-            var list = Mapper.Map<List<QtDetailItem>>(from.List);
-            DbContext.QtDetailItem.UpdateRange(list);
-            DbContext.SaveChanges();
-            return ResponseBodyEntity();
+           
+			//            DbContext.QtDetailItem.UpdateRange(list);
+			//            DbContext.SaveChanges();
+			if (listParam!=null&& listParam.Count>0)
+			{
+				listParam.ForEach(d =>
+				{
+					var model = DbContext.QtDetailItem.FirstOrDefault(p=>p.Id.Equals(d.Id));
+					if (model != null)
+					{
+						model.SelectResult = d.SelectResult;
+						DbContext.QtDetailItem.Update(model);
+					}
+
+				});
+				DbContext.SaveChanges();
+				return ResponseBodyEntity();
+			}
+			else{
+				return ResponseBodyEntity("",EnumResult.Error,"数据对象为空");
+			}
+            
         }
     }
 }

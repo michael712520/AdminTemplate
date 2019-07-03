@@ -3,6 +3,7 @@ using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using AdminTemplate.service.Dto.QtDetailItem;
 
 namespace AdminTemplate.Controllers
 {
@@ -11,10 +12,13 @@ namespace AdminTemplate.Controllers
     public class MbDetailController : ControllerBase
     {
         private readonly MbDetailService _service;
-        public MbDetailController(MbDetailService service)
+        private readonly QtDetailService _QtDetailservice;
+		public MbDetailController(MbDetailService service)
         {
             _service = service;
-        }
+            _QtDetailservice=new QtDetailService();
+
+		}
         [HttpGet, Route("Get")]
         public NetResult Get(string id)
         {
@@ -63,7 +67,13 @@ namespace AdminTemplate.Controllers
 
             return _service.ListSaveItem(list);
         }
-        [HttpPost, Route("SaveItem")]
+        [HttpPost, Route("UpdateSelectResult")]
+        public NetResult UpdateSelectResult([FromBody]List<QtDetailItemDto> listParam)
+        {
+
+	        return _QtDetailservice.UpdateSelectResult(listParam);
+        }
+		[HttpPost, Route("SaveItem")]
         public NetResult SaveItem([FromBody]MbDetailItemDto form)
         {
 
