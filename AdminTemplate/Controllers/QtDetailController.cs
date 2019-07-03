@@ -1,8 +1,7 @@
-﻿using AdminTemplate.service.Dto.LatitudeDetailItem;
+﻿using AdminTemplate.service.Dto.QtDetailItem;
 using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace AdminTemplate.Controllers
 {
@@ -59,12 +58,12 @@ namespace AdminTemplate.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="from"></param>
         /// <returns></returns>
-        [HttpPost, Route("UpdateQtDetailItem")]
-        public NetResult UpdateQtDetailItem([FromBody]List<LatitudeDetailItemDto> list)
+        [HttpPost, Route("UpdateAll")]
+        public NetResult UpdateAll([FromBody]QtDetailItemFrom from)
         {
-            return _service.UpdateQtDetailItem(list);
+            return _service.UpdateAll(from);
         }
     }
 }

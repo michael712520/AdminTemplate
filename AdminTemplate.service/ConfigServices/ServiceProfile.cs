@@ -3,6 +3,7 @@ using AdminTemplate.service.Dto.baseReEntity;
 using AdminTemplate.service.Dto.LatitudeDetail;
 using AdminTemplate.service.Dto.LatitudeDetailItem;
 using AdminTemplate.service.Dto.MbDetail;
+using AdminTemplate.service.Dto.QtDetailItem;
 using AutoMapper;
 
 namespace AdminTemplate.service.ConfigServices
@@ -30,7 +31,7 @@ namespace AdminTemplate.service.ConfigServices
                 .ForMember(f => f.Value, opt => opt.MapFrom(f => f.Id));
             CreateMap<MbDetail, QtDetail>().ForMember(f => f.MbDetailId, opt => opt.MapFrom(f => f.Id));
             CreateMap<MbDetailItem, QtDetailItem>();
-
+            CreateMap<QtDetailItemDto, QtDetailItem>();
 
         }
     }

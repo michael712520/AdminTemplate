@@ -1,5 +1,7 @@
-﻿using AdminTemplate.service.BaseServices;
-using AdminTemplate.service.Dto.LatitudeDetailItem;
+﻿using AdminTemplate.DataBase.Models;
+using AdminTemplate.service.BaseServices;
+using AdminTemplate.service.Dto.QtDetailItem;
+using AutoMapper;
 using GlobalConfiguration.Utility;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -34,17 +36,10 @@ namespace AdminTemplate.service.Services
             return ResponseBodyEntity(model);
         }
 
-        public NetResult UpdateQtDetailItem(List<LatitudeDetailItemDto> list)
+        public NetResult UpdateAll(QtDetailItemFrom from)
         {
-            list.ForEach(d =>
-            {
-                var model = DbContext.QtDetailItem.FirstOrDefault(p => p.Id.Equals(d.Id));
-                if (model != null)
-                {
-                    model.SelectResult = d.SelectResult;
-                    DbContext.QtDetailItem.Update(model);
-                }
-            });
+            var list = Mapper.Map<List<QtDetailItem>>(from.List);
+            DbContext.QtDetailItem.UpdateRange(list);
             DbContext.SaveChanges();
             return ResponseBodyEntity();
         }

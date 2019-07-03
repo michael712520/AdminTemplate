@@ -91,7 +91,10 @@ namespace AdminTemplate.service.Services
         public NetResult List(string id, PaginationStartAndLengthFilter filter)
         {
             var query = DbContext.LatitudeDetail.AsNoTracking();
-
+            if (id != null)
+            {
+                query = query.Where(p => p.MbDetailId.Equals(id));
+            }
             if (filter.Keywords != null)
             {
                 query = query.Where(p => p.Name.Contains(filter.Keywords));
