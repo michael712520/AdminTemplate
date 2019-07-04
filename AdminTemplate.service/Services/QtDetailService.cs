@@ -41,6 +41,8 @@ namespace AdminTemplate.service.Services
            
 			//            DbContext.QtDetailItem.UpdateRange(list);
 			//            DbContext.SaveChanges();
+			string id = null;
+			string mbId = null;
 			if (listParam!=null&& listParam.Count>0)
 			{
 				listParam.ForEach(d =>
@@ -48,18 +50,21 @@ namespace AdminTemplate.service.Services
 					var model = DbContext.QtDetailItem.FirstOrDefault(p=>p.Id.Equals(d.Id));
 					if (model != null)
 					{
+						id = model.QtDetailId;
+						mbId = model.MbDetailId;
 						model.SelectResult = d.SelectResult;
 						DbContext.QtDetailItem.Update(model);
 					}
 
 				});
 				DbContext.SaveChanges();
-				return ResponseBodyEntity();
+				 
 			}
 			else{
 				return ResponseBodyEntity("",EnumResult.Error,"数据对象为空");
 			}
-            
-        }
+			return ResponseBodyEntity();
+
+		}
     }
 }
