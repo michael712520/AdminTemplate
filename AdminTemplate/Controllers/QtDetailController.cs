@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using AdminTemplate.service.Dto.QtDetailItem;
+﻿using AdminTemplate.service.Dto.QtDetailItem;
 using AdminTemplate.service.Services;
-using Aspose.Words.Lists;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace AdminTemplate.Controllers
 {
@@ -62,10 +61,10 @@ namespace AdminTemplate.Controllers
         /// </summary>
         /// <param name="listParam"></param>
         /// <returns></returns>
-        [HttpGet, Route("UpdateSelectResult")]
-        public NetResult UpdateSelectResult(string listParam)
+        [HttpPost, Route("UpdateSelectResult")]
+        public NetResult UpdateSelectResult([FromBody]List<QtDetailItemDto> listParam)
         {
-            return  new NetResult("sadsadasd");
+            return _service.UpdateSelectResult(listParam);
         }
     }
 }

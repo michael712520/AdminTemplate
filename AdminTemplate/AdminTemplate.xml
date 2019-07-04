@@ -82,11 +82,11 @@
             <param name="mbDetailId"></param>
             <returns></returns>
         </member>
-        <member name="M:AdminTemplate.Controllers.QtDetailController.UpdateAll(AdminTemplate.service.Dto.QtDetailItem.QtDetailItemFrom)">
+        <member name="M:AdminTemplate.Controllers.QtDetailController.UpdateSelectResult(System.Collections.Generic.List{AdminTemplate.service.Dto.QtDetailItem.QtDetailItemDto})">
             <summary>
             
             </summary>
-            <param name="from"></param>
+            <param name="listParam"></param>
             <returns></returns>
         </member>
     </members>
