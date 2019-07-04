@@ -58,6 +58,16 @@ namespace AdminTemplate.service.Services
 
 				});
 				DbContext.SaveChanges();
+
+				if (id != null && mbId != null)
+				{
+					var listQtDetailItem = DbContext.QtDetailItem.Where(p =>
+						p.QtDetailId.Equals(id) && (p.Type.Equals("pfduoxuan") || p.Type.Equals("pfdanxuan"))).ToList();
+					var listLatitude=DbContext.LatitudeDetail.Where(p => p.Id.Equals(mbId)).ToList();
+
+
+				}
+
 				 
 			}
 			else{
