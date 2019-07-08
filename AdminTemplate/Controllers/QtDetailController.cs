@@ -33,14 +33,23 @@ namespace AdminTemplate.Controllers
         {
             return _service.Get(id);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="studentIdCard"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        [HttpGet, Route("GetStudentAll/{studentIdCard}")]
+		/// <summary>
+		/// 根据id获取问卷结果
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+        [HttpGet, Route("GetResult/{id}")]
+		public NetResult GetResult(string id)
+        {
+	        return _service.GetResult(id);
+		} 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="studentIdCard"></param>
+		/// <param name="filter"></param>
+		/// <returns></returns>
+		[HttpGet, Route("GetStudentAll/{studentIdCard}")]
         public NetResult GetStudentAll(string studentIdCard, PaginationStartAndLengthFilter filter)
         {
             return _service.GetStudentAll(studentIdCard, filter);

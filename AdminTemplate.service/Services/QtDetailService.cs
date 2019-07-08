@@ -22,8 +22,16 @@ namespace AdminTemplate.service.Services
             }
             return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
         }
-
-        public NetResult GetStudentAll(string studentIdCard, PaginationStartAndLengthFilter filter)
+        public NetResult GetResult(string id)
+        {
+	        var model = DbContext.QtDetail.AsNoTracking().Include(o => o.QtLatitudeDetail).ThenInclude(o=>o.LatitudeDetail).FirstOrDefault(p => p.Id.Equals(id));
+	        if (model != null)
+	        {
+		        return ResponseBodyEntity(model);
+	        }
+	        return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
+        }
+		public NetResult GetStudentAll(string studentIdCard, PaginationStartAndLengthFilter filter)
         {
             var query = DbContext.QtDetail.Where(p => p.StudentIdCard.Equals(studentIdCard));
 
@@ -33,7 +41,7 @@ namespace AdminTemplate.service.Services
         }
         public NetResult GetByStudentAndMbDetailId(string studentIdCard, string mbDetailId)
         {
-            var model = DbContext.QtDetail.FirstOrDefault(p => p.StudentIdCard.Equals(studentIdCard) && p.MbDetailId.Equals(mbDetailId));
+            var model = DbContext.QtDetail.Include(o => o.QtLatitudeDetail).ThenInclude(o => o.LatitudeDetail).FirstOrDefault(p => p.StudentIdCard.Equals(studentIdCard) && p.MbDetailId.Equals(mbDetailId));
             return ResponseBodyEntity(model);
         }
 

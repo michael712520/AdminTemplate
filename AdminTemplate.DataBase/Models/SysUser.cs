@@ -13,5 +13,7 @@ namespace AdminTemplate.DataBase.Models
         public string Openid { get; set; }
         public int? Type { get; set; }
         public string NickName { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
     }
 }

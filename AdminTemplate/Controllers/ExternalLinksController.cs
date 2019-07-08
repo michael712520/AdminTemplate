@@ -1,4 +1,5 @@
-﻿using AdminTemplate.service.Services;
+﻿using AdminTemplate.service.Dto;
+using AdminTemplate.service.Services;
 using GlobalConfiguration.Utility;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,18 +21,15 @@ namespace AdminTemplate.Controllers
         {
             _service = service;
         }
-        /// <summary>
-        /// 导师给某个学员做评估的链接
-        /// </summary>
-        /// <param name="mbQuestionId">问卷id</param>
-        /// <param name="teacherIdCard">老师身份证</param>
-        /// <param name="foreignType">类型</param>
-        /// <param name="studentIdCard">学生身份证</param>
-        /// <returns></returns>
-        [HttpPost, Route("Add/{mbQuestionId}/{teacherIdCard}/{foreignType}/{studentIdCard}/{callBack}")]
-        public NetResult Add(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard, string callBack)
+		/// <summary>
+		/// 导师给某个学员做评估的链接
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		[HttpPost, Route("Add")]
+        public NetResult Add([FromBody] ExternalLinksAddDto model)
         {
-            return _service.Add(mbQuestionId, teacherIdCard, foreignType, studentIdCard, callBack);
+            return _service.Add(model.mbQuestionId, model.teacherIdCard, model.foreignType, model.studentIdCard, model.callBack);
         }
 
         /// <summary>

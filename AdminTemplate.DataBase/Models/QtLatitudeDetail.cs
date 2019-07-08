@@ -9,6 +9,8 @@ namespace AdminTemplate.DataBase.Models
         public string LatitudeDetailId { get; set; }
         public double? Score { get; set; }
         public string QtDetailId { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
 
         public virtual LatitudeDetail LatitudeDetail { get; set; }
         public virtual QtDetail QtDetail { get; set; }

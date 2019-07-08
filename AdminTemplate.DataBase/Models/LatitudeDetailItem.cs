@@ -18,6 +18,8 @@ namespace AdminTemplate.DataBase.Models
         public double? BaseScore { get; set; }
         public int? Sort { get; set; }
         public string ReturnInfo { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
 
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
     }

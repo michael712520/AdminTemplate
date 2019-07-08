@@ -21,6 +21,8 @@ namespace AdminTemplate.DataBase.Models
         public string LatitudeDetailIds { get; set; }
         public string PageInfo { get; set; }
         public string SelectResult { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
 
         public virtual LatitudeDetailItem LatitudeDetailItem { get; set; }
         public virtual MbDetail MbDetail { get; set; }
