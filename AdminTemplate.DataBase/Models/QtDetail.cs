@@ -8,6 +8,7 @@ namespace AdminTemplate.DataBase.Models
         public QtDetail()
         {
             QtDetailItem = new HashSet<QtDetailItem>();
+            QtDetailbatch = new HashSet<QtDetailbatch>();
             QtLatitudeDetail = new HashSet<QtLatitudeDetail>();
         }
 
@@ -28,6 +29,7 @@ namespace AdminTemplate.DataBase.Models
         public DateTime? UpdateTime { get; set; }
 
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
+        public virtual ICollection<QtDetailbatch> QtDetailbatch { get; set; }
         public virtual ICollection<QtLatitudeDetail> QtLatitudeDetail { get; set; }
     }
 }

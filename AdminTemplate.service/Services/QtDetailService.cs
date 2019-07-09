@@ -22,19 +22,20 @@ namespace AdminTemplate.service.Services
 			}
 			return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
 		}
-		public NetResult GetResult(string id)
+		public NetResult GetResult(string id, string batchNumber)
 		{
-			var model = DbContext.QtDetail.AsNoTracking().Include(o => o.QtLatitudeDetail).ThenInclude(o => o.LatitudeDetail).FirstOrDefault(p => p.Id.Equals(id));
+			var model = DbContext.QtDetail.AsNoTracking().FirstOrDefault(p => p.Id.Equals(id));
 			if (model != null)
 			{
+				model.QtLatitudeDetail = DbContext.QtLatitudeDetail.Include(o => o.LatitudeDetail)
+					.Where(p => p.BatchNumber.Equals(batchNumber)).ToList();
 				return ResponseBodyEntity(model);
 			}
 			return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
 		}
 		public NetResult GetStudentAll(string studentIdCard, PaginationStartAndLengthFilter filter)
 		{
-			var query = DbContext.QtDetail.Where(p => p.StudentIdCard.Equals(studentIdCard));
-
+			var query = DbContext.QtDetailbatch.Where(p => p.StudentIdCard.Equals(studentIdCard));
 			var count = query.Count();
 			var list = query.Skip(filter.Start).Take(filter.Length).ToList();
 			return ResponseBodyEntity(list, count);
@@ -397,27 +398,35 @@ namespace AdminTemplate.service.Services
 						myDictionary.Add(d.Id, total);
 					});
 
-					foreach (var item in myDictionary)
+					var mk = DbContext.QtDetail.AsNoTracking().FirstOrDefault(p => p.Id.Equals(id));
+					if (mk != null)
 					{
-						QtLatitudeDetail model = new QtLatitudeDetail();
-						model.Id = Guid.NewGuid().ToString("N");
-						model.QtDetailId = id;
-						model.LatitudeDetailId = item.Key;
-						model.Score = item.Value;
-						model.BatchNumber = System.DateTime.Now.ToString("yyyyMMddHHmmss");
-						DbContext.QtLatitudeDetail.Add(model);
+						mk.State = 1;
+						mk = DbContext.QtDetail.Update(mk).Entity;
+						DbContext.SaveChanges();
+						QtDetailbatch qtDetailBatch = AutoMapper.Mapper.Map<QtDetailbatch>(mk);
+						qtDetailBatch.Id = Guid.NewGuid().ToString("N");
+						qtDetailBatch.QtDetailId = mk.Id;
+
+						qtDetailBatch.BatchNumber = DateTime.Now.ToString("yyyyMMddHHmmss");
+						foreach (var item in myDictionary)
+						{
+							QtLatitudeDetail model = new QtLatitudeDetail();
+							model.Id = Guid.NewGuid().ToString("N");
+							model.QtDetailId = id;
+							model.LatitudeDetailId = item.Key;
+							model.Score = item.Value;
+							model.BatchNumber = qtDetailBatch.BatchNumber;
+							qtDetailBatch.QtLatitudeDetail.Add(model);
+						}
+						DbContext.QtDetailbatch.Add(qtDetailBatch);
+						DbContext.SaveChanges();
 					}
 
-					DbContext.SaveChanges();
+
 				}
 
-				var mk = DbContext.QtDetail.AsNoTracking().FirstOrDefault(p => p.Id.Equals(id));
-				if (mk != null)
-				{
-					mk.State = 1;
-					DbContext.QtDetail.Update(mk);
-					DbContext.SaveChanges();
-				}
+
 			}
 			else
 			{
@@ -426,5 +435,40 @@ namespace AdminTemplate.service.Services
 			return ResponseBodyEntity();
 
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="studentIdCard"></param>
+		/// <param name="mbId"></param>
+		/// <returns></returns>
+		public NetResult SelectResultSimple(string id, string studentIdCard, string mbId)
+		{
+			QtDetail model = null;
+			if (id != null)
+			{
+				model = DbContext.QtDetail.Include(o => o.QtLatitudeDetail).AsNoTracking().FirstOrDefault(p => p.Id.Equals(id));
+			}
+			else
+			{
+
+				model = DbContext.QtDetail.Include(o => o.QtLatitudeDetail).AsNoTracking().FirstOrDefault(p => p.MbDetailId.Equals(mbId) && p.StudentIdCard.Equals(studentIdCard));
+			}
+
+			if (model != null)
+			{
+				var cd = new
+				{
+					list = model.QtLatitudeDetail
+						.GroupBy(g => new { g.CreateTime, g.BatchNumber },
+						(k, g) => new { k.CreateTime, k.BatchNumber, name = model.Title, id = model.Id, count = g.Count() }).OrderByDescending(o => o.CreateTime).Select(s => new { s.BatchNumber, s.CreateTime, s.count, s.name, s.id }).ToList()
+				};
+				return ResponseBodyEntity(cd);
+			}
+
+			return ResponseBodyEntity();
+		}
+
 	}
 }

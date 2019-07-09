@@ -20,5 +20,4 @@
     <ProjectReference Include="..\AdminTemplate.service\AdminTemplate.service.csproj" />
     <ProjectReference Include="..\AuxiliaryApplications\Jinhe.Storage.App\Jinhe.Storage.App.csproj" />
   </ItemGroup>
-
 </Project>

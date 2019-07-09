@@ -12,8 +12,10 @@ namespace AdminTemplate.DataBase.Models
         public DateTime? CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
         public string BatchNumber { get; set; }
+        public string QtDetailbatchId { get; set; }
 
         public virtual LatitudeDetail LatitudeDetail { get; set; }
         public virtual QtDetail QtDetail { get; set; }
+        public virtual QtDetailbatch QtDetailbatch { get; set; }
     }
 }

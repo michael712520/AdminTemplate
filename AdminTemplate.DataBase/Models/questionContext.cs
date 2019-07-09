@@ -22,6 +22,7 @@ namespace AdminTemplate.DataBase.Models
         public virtual DbSet<MbGrade> MbGrade { get; set; }
         public virtual DbSet<QtDetail> QtDetail { get; set; }
         public virtual DbSet<QtDetailItem> QtDetailItem { get; set; }
+        public virtual DbSet<QtDetailbatch> QtDetailbatch { get; set; }
         public virtual DbSet<QtLatitudeDetail> QtLatitudeDetail { get; set; }
         public virtual DbSet<SysUser> SysUser { get; set; }
 
@@ -503,6 +504,66 @@ namespace AdminTemplate.DataBase.Models
                     .HasConstraintName("qt_detail_item_ibfk_3");
             });
 
+            modelBuilder.Entity<QtDetailbatch>(entity =>
+            {
+                entity.ToTable("qt_detailbatch", "question");
+
+                entity.HasIndex(e => e.QtDetailId)
+                    .HasName("qt_detailbatch_ibfk_1");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.BatchNumber)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Content)
+                    .HasColumnName("content")
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnName("create_time")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.ForeignType)
+                    .HasColumnName("foreignType")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.QtDetailId)
+                    .HasColumnName("qt_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StudentIdCard)
+                    .HasColumnName("studentIdCard")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TeacherIdCard)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Title)
+                    .HasColumnName("title")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdateTime)
+                    .HasColumnName("update_time")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(d => d.QtDetail)
+                    .WithMany(p => p.QtDetailbatch)
+                    .HasForeignKey(d => d.QtDetailId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("qt_detailbatch_ibfk_1");
+            });
+
             modelBuilder.Entity<QtLatitudeDetail>(entity =>
             {
                 entity.ToTable("qt_latitude_detail", "question");
@@ -511,7 +572,10 @@ namespace AdminTemplate.DataBase.Models
                     .HasName("latitude_detail_id");
 
                 entity.HasIndex(e => e.QtDetailId)
-                    .HasName("qt_detail_id");
+                    .HasName("qt_latitude_detail_ibfk_2");
+
+                entity.HasIndex(e => e.QtDetailbatchId)
+                    .HasName("qt_latitude_detail_ibfk_3");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -537,6 +601,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
+                entity.Property(e => e.QtDetailbatchId)
+                    .HasColumnName("qt_detailbatch_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Score)
                     .HasColumnName("score")
                     .HasColumnType("double(11,0)");
@@ -553,7 +622,14 @@ namespace AdminTemplate.DataBase.Models
                 entity.HasOne(d => d.QtDetail)
                     .WithMany(p => p.QtLatitudeDetail)
                     .HasForeignKey(d => d.QtDetailId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("qt_latitude_detail_ibfk_2");
+
+                entity.HasOne(d => d.QtDetailbatch)
+                    .WithMany(p => p.QtLatitudeDetail)
+                    .HasForeignKey(d => d.QtDetailbatchId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("qt_latitude_detail_ibfk_3");
             });
 
             modelBuilder.Entity<SysUser>(entity =>
