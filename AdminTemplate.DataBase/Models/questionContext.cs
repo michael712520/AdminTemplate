@@ -519,6 +519,10 @@ namespace AdminTemplate.DataBase.Models
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
+                entity.Property(e => e.BatchNumber)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.CreateTime)
                     .HasColumnName("create_time")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");

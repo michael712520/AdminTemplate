@@ -30,7 +30,8 @@ namespace AdminTemplate.service.Services
                 model.UserId = form.UserId;
                 model.Title = form.Title;
                 model.Content = form.Content;
-                model = DbContext.MbDetail.Add(model).Entity;
+                
+				model = DbContext.MbDetail.Add(model).Entity;
                 DbContext.SaveChanges();
                 return ResponseBodyEntity(model);
             }
@@ -160,7 +161,9 @@ namespace AdminTemplate.service.Services
                         var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
                         model.LatitudeDetailId = ml?.Id;
                         model.LatitudeDetailName = ml?.Name;
-                    }
+                         
+
+					}
                 }
                 else
                 {
@@ -182,8 +185,8 @@ namespace AdminTemplate.service.Services
                         model.LatitudeDetailId = ml?.Id;
                         model.LatitudeDetailName = ml?.Name;
                     }
-                }
-                DbContext.MbDetailItem.Update(model);
+                    DbContext.MbDetailItem.Update(model);
+				}
 
             }
 
@@ -227,12 +230,24 @@ namespace AdminTemplate.service.Services
                         model.LatitudeDetailId = ml?.Id;
                         model.LatitudeDetailName = ml?.Name;
                     }
-                }
-                DbContext.MbDetailItem.Update(model);
+                    DbContext.MbDetailItem.Update(model);
+				}
+               
 
             }
             DbContext.SaveChanges();
             return ResponseBodyEntity();
         }
+
+		/**
+		 *
+		 */
+        public NetResult GetSetWd(string detailId)
+        {
+			 
+	        DbContext.MbDetailItem.Where(p => p.DetailId.Equals(detailId)).OrderBy(o => o.Order).ToList();
+			return ResponseBodyEntity();
+		}
+
     }
 }
