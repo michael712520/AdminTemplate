@@ -6,65 +6,79 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace AdminTemplate.service.Services
 {
-    public class ExternalLinksService : BaseService
-    {
-        public NetResult Add(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard, string callBack)
-        {
-            var model = DbContext.MbDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(mbQuestionId));
-            if (model == null)
-            {
-                return ResponseBodyEntity("", EnumResult.Error, "没有找到对应的问卷");
-            }
+	public class ExternalLinksService : BaseService
+	{
+		public NetResult Add(string mbQuestionId, string teacherIdCard, string foreignType, string studentIdCard, string callBack)
+		{
 
-            if (teacherIdCard == null || foreignType == null || studentIdCard == null)
-            {
-                return ResponseBodyEntity("", EnumResult.Error, "确实对应的信息");
-            }
+			var mj = DbContext.QtDetail.AsNoTracking()
+				.Where(p => p.StudentIdCard.Equals(studentIdCard) && p.TeacherIdCard.Equals(teacherIdCard)).OrderByDescending(o => o.CreateTime)
+				.FirstOrDefault();
+			if (mj != null)
+			{
+				mj.CallBack = callBack;
+				DbContext.QtDetail.Update(mj);
+				callBack = HttpUtility.UrlEncode(callBack, System.Text.Encoding.GetEncoding(65001));
+				DbContext.SaveChanges();
+				return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={mj.Id}&callBack={callBack}");
+			}
 
-            QtDetail qtDetail = Mapper.Map<QtDetail>(model);
-            qtDetail.Id = Guid.NewGuid().ToString("N");
-            qtDetail.TeacherIdCard = teacherIdCard;
-            qtDetail.ForeignType = foreignType;
-            qtDetail.StudentIdCard = studentIdCard;
-            qtDetail.CallBack = callBack;
-            List<QtDetailItem> items = Mapper.Map<List<QtDetailItem>>(model.MbDetailItem);
-            items.ForEach(d =>
-            {
-                d.Id = Guid.NewGuid().ToString("N");
-                d.QtDetailId = qtDetail.Id;
-                d.MbDetailId = model.Id;
-                qtDetail.QtDetailItem.Add(d);
-            });
+			var model = DbContext.MbDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(mbQuestionId));
+			if (model == null)
+			{
+				return ResponseBodyEntity("", EnumResult.Error, "没有找到对应的问卷");
+			}
 
-            DbContext.QtDetail.Add(qtDetail);
-            DbContext.SaveChanges();
-            return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}");
-        }
+			if (teacherIdCard == null || foreignType == null || studentIdCard == null)
+			{
+				return ResponseBodyEntity("", EnumResult.Error, "确实对应的信息");
+			}
 
-        public NetResult GetStudentList(string studentIdCard)
-        {
+			QtDetail qtDetail = Mapper.Map<QtDetail>(model);
+			qtDetail.Id = Guid.NewGuid().ToString("N");
+			qtDetail.TeacherIdCard = teacherIdCard;
+			qtDetail.ForeignType = foreignType;
+			qtDetail.StudentIdCard = studentIdCard;
+			qtDetail.CallBack = callBack;
+			List<QtDetailItem> items = Mapper.Map<List<QtDetailItem>>(model.MbDetailItem);
+			items.ForEach(d =>
+			{
+				d.Id = Guid.NewGuid().ToString("N");
+				d.QtDetailId = qtDetail.Id;
+				d.MbDetailId = model.Id;
+				qtDetail.QtDetailItem.Add(d);
+			});
 
-            return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentList?studentIdCard={studentIdCard}");
-        }
-        public NetResult StudentAndMbQuestion(string studentIdCard, string mbQuestionId)
-        {
+			DbContext.QtDetail.Add(qtDetail);
+			DbContext.SaveChanges();
+			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}");
+		}
 
-            return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentAndMbQuestion?studentIdCard={studentIdCard}&mbQuestionId={mbQuestionId}");
-        }
+		public NetResult GetStudentList(string studentIdCard)
+		{
 
-        public NetResult QuestionResult(string studentIdCard, string mbQuestionId)
-        {
-            var firstOrDefault = DbContext.QtDetail.Include(o => o.QtLatitudeDetail).AsNoTracking().FirstOrDefault(p => p.StudentIdCard.Equals(studentIdCard) && p.MbDetailId.Equals(mbQuestionId));
-            if (firstOrDefault != null)
-            {
-                return ResponseBodyEntity(firstOrDefault);
-            }
-            else { return ResponseBodyEntity("", EnumResult.Error, "查询结果为空"); }
+			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentList?studentIdCard={studentIdCard}");
+		}
+		public NetResult StudentAndMbQuestion(string studentIdCard, string mbQuestionId)
+		{
+
+			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentAndMbQuestion?studentIdCard={studentIdCard}&mbQuestionId={mbQuestionId}");
+		}
+
+		public NetResult QuestionResult(string studentIdCard, string mbQuestionId)
+		{
+			var firstOrDefault = DbContext.QtDetail.Include(o => o.QtLatitudeDetail).AsNoTracking().FirstOrDefault(p => p.StudentIdCard.Equals(studentIdCard) && p.MbDetailId.Equals(mbQuestionId));
+			if (firstOrDefault != null)
+			{
+				return ResponseBodyEntity(firstOrDefault);
+			}
+			else { return ResponseBodyEntity("", EnumResult.Error, "查询结果为空"); }
 
 
-        }
-    }
+		}
+	}
 }
