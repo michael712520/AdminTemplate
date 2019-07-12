@@ -8,7 +8,6 @@ namespace AdminTemplate.DataBase.Models
         public MbDetail()
         {
             MbDetailItem = new HashSet<MbDetailItem>();
-            MbGrade = new HashSet<MbGrade>();
             QtDetailItem = new HashSet<QtDetailItem>();
         }
 
@@ -24,7 +23,6 @@ namespace AdminTemplate.DataBase.Models
         public DateTime? UpdateTime { get; set; }
 
         public virtual ICollection<MbDetailItem> MbDetailItem { get; set; }
-        public virtual ICollection<MbGrade> MbGrade { get; set; }
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
     }
 }

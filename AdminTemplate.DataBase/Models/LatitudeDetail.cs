@@ -7,6 +7,7 @@ namespace AdminTemplate.DataBase.Models
     {
         public LatitudeDetail()
         {
+            LatitudeGrade = new HashSet<LatitudeGrade>();
             MbDetailItem = new HashSet<MbDetailItem>();
             QtLatitudeDetail = new HashSet<QtLatitudeDetail>();
         }
@@ -21,7 +22,9 @@ namespace AdminTemplate.DataBase.Models
         public string Relationship { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
+        public int? Pattern { get; set; }
 
+        public virtual ICollection<LatitudeGrade> LatitudeGrade { get; set; }
         public virtual ICollection<MbDetailItem> MbDetailItem { get; set; }
         public virtual ICollection<QtLatitudeDetail> QtLatitudeDetail { get; set; }
     }

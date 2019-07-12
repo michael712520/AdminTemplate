@@ -17,9 +17,9 @@ namespace AdminTemplate.DataBase.Models
 
         public virtual DbSet<LatitudeDetail> LatitudeDetail { get; set; }
         public virtual DbSet<LatitudeDetailItem> LatitudeDetailItem { get; set; }
+        public virtual DbSet<LatitudeGrade> LatitudeGrade { get; set; }
         public virtual DbSet<MbDetail> MbDetail { get; set; }
         public virtual DbSet<MbDetailItem> MbDetailItem { get; set; }
-        public virtual DbSet<MbGrade> MbGrade { get; set; }
         public virtual DbSet<QtDetail> QtDetail { get; set; }
         public virtual DbSet<QtDetailItem> QtDetailItem { get; set; }
         public virtual DbSet<QtDetailbatch> QtDetailbatch { get; set; }
@@ -69,6 +69,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("name")
                     .HasMaxLength(32)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Pattern)
+                    .HasColumnName("pattern")
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("0");
 
                 entity.Property(e => e.Relationship)
                     .HasColumnName("relationship")
@@ -133,6 +138,57 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.UpdateTime)
                     .HasColumnName("update_time")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
+
+            modelBuilder.Entity<LatitudeGrade>(entity =>
+            {
+                entity.ToTable("latitude_grade", "question");
+
+                entity.HasIndex(e => e.LatitudeDetailId)
+                    .HasName("mb_grade_ibfk_1");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Content)
+                    .HasColumnName("content")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnName("create_time")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.DownScore)
+                    .HasColumnName("downScore")
+                    .HasColumnType("double(255,2)");
+
+                entity.Property(e => e.LatitudeDetailId)
+                    .HasColumnName("latitude_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Titile)
+                    .HasColumnName("titile")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpScore)
+                    .HasColumnName("upScore")
+                    .HasColumnType("double(255,2)");
+
+                entity.Property(e => e.UpdateTime)
+                    .HasColumnName("update_time")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(d => d.LatitudeDetail)
+                    .WithMany(p => p.LatitudeGrade)
+                    .HasForeignKey(d => d.LatitudeDetailId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("latitude_grade_ibfk_1");
             });
 
             modelBuilder.Entity<MbDetail>(entity =>
@@ -272,57 +328,6 @@ namespace AdminTemplate.DataBase.Models
                     .WithMany(p => p.MbDetailItem)
                     .HasForeignKey(d => d.LatitudeDetailId)
                     .HasConstraintName("mb_detail_item_ibfk_2");
-            });
-
-            modelBuilder.Entity<MbGrade>(entity =>
-            {
-                entity.ToTable("mb_grade", "question");
-
-                entity.HasIndex(e => e.MbDetailId)
-                    .HasName("mb_grade_ibfk_1");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasMaxLength(32)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Content)
-                    .HasColumnName("content")
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreateTime)
-                    .HasColumnName("create_time")
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                entity.Property(e => e.DownScore)
-                    .HasColumnName("downScore")
-                    .HasColumnType("double(255,2)");
-
-                entity.Property(e => e.MbDetailId)
-                    .HasColumnName("mb_detail_id")
-                    .HasMaxLength(32)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Titile)
-                    .HasColumnName("titile")
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpScore)
-                    .HasColumnName("upScore")
-                    .HasColumnType("double(255,2)");
-
-                entity.Property(e => e.UpdateTime)
-                    .HasColumnName("update_time")
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                entity.HasOne(d => d.MbDetail)
-                    .WithMany(p => p.MbGrade)
-                    .HasForeignKey(d => d.MbDetailId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("mb_grade_ibfk_1");
             });
 
             modelBuilder.Entity<QtDetail>(entity =>

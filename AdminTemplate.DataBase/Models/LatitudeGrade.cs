@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AdminTemplate.DataBase.Models
 {
-    public partial class MbGrade
+    public partial class LatitudeGrade
     {
         public string Id { get; set; }
         public DateTime? CreateTime { get; set; }
@@ -12,8 +12,8 @@ namespace AdminTemplate.DataBase.Models
         public string Content { get; set; }
         public double? UpScore { get; set; }
         public double? DownScore { get; set; }
-        public string MbDetailId { get; set; }
+        public string LatitudeDetailId { get; set; }
 
-        public virtual MbDetail MbDetail { get; set; }
+        public virtual LatitudeDetail LatitudeDetail { get; set; }
     }
 }

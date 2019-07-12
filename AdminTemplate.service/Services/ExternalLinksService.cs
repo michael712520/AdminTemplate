@@ -55,7 +55,8 @@ namespace AdminTemplate.service.Services
 
 			DbContext.QtDetail.Add(qtDetail);
 			DbContext.SaveChanges();
-			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}");
+			callBack = HttpUtility.UrlEncode(callBack, System.Text.Encoding.GetEncoding(65001));
+			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}&callBack={callBack}");
 		}
 
 		public NetResult GetStudentList(string studentIdCard)

@@ -407,7 +407,6 @@ namespace AdminTemplate.service.Services
 						QtDetailbatch qtDetailBatch = AutoMapper.Mapper.Map<QtDetailbatch>(mk);
 						qtDetailBatch.Id = Guid.NewGuid().ToString("N");
 						qtDetailBatch.QtDetailId = mk.Id;
-
 						qtDetailBatch.BatchNumber = DateTime.Now.ToString("yyyyMMddHHmmss");
 						foreach (var item in myDictionary)
 						{

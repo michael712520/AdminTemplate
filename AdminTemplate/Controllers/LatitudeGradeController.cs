@@ -10,26 +10,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdminTemplate.Controllers
 {
-    [Route("api/[controller]")]
-    public class MbGradeController : ControllerBase
-    {
-	    private readonly MbGradeService _service;
+	/// <summary>
+	/// 
+	/// </summary>
+	[Route("api/[controller]")]
+	public class LatitudeGradeController : ControllerBase
+	{
+		private readonly LatitudeGradeService _service;
 
-	    public MbGradeController(MbGradeService service)
-	    {
-		    _service = service;
-	    }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="service"></param>
+		public LatitudeGradeController(LatitudeGradeService service)
+		{
+			_service = service;
+		}
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-	    [HttpGet, Route("Get/{id}")]
+		[HttpGet, Route("Get/{id}")]
 		public NetResult Get(string id)
-	    {
-		   return _service.Get(id);
+		{
+			return _service.Get(id);
 
-	    }
+		}
 		/// <summary>
 		/// 
 		/// </summary>
@@ -43,9 +50,19 @@ namespace AdminTemplate.Controllers
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpPost, Route("Delete/{id}")]
+		public NetResult Delete(string id)
+		{
+			return _service.Delete(id);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="from"></param>
 		/// <returns></returns>
-		[HttpPost, Route("GetMbDetail")]
+		[HttpPost, Route("SaveUpdate")]
 		public NetResult SaveUpdate([FromBody]MbGradeDto from)
 		{
 			return _service.SaveUpdate(from);
