@@ -68,6 +68,7 @@ namespace AdminTemplate.service.Services
 						id = model.QtDetailId;
 						mbId = model.MbDetailId;
 						model.SelectResult = d.SelectResult;
+						model.State = 1;
 						DbContext.QtDetailItem.Update(model);
 					}
 
@@ -131,6 +132,20 @@ namespace AdminTemplate.service.Services
 					listLatitude.ForEach(d =>
 					{
 						double total = 0;
+						try
+						{
+							if (d.BaseScore != null)
+							{
+								total = total + (double)d.BaseScore;
+							}
+						}
+						catch (Exception e)
+						{
+
+						}
+
+
+
 						dynamic relationship = JsonConvert.DeserializeObject(d.Relationship);
 						var ax = relationship.ax;
 						try
