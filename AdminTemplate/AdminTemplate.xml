@@ -15,14 +15,11 @@
             </summary>
             <param name="service"></param>
         </member>
-        <member name="M:AdminTemplate.Controllers.ExternalLinksController.Add(System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:AdminTemplate.Controllers.ExternalLinksController.Add(AdminTemplate.service.Dto.ExternalLinksAddDto)">
             <summary>
             导师给某个学员做评估的链接
             </summary>
-            <param name="mbQuestionId">问卷id</param>
-            <param name="teacherIdCard">老师身份证</param>
-            <param name="foreignType">类型</param>
-            <param name="studentIdCard">学生身份证</param>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="M:AdminTemplate.Controllers.ExternalLinksController.GetStudentList(System.String)">
@@ -48,6 +45,70 @@
             <param name="mbQuestionId"></param>
             <returns></returns>
         </member>
+        <member name="T:AdminTemplate.Controllers.LatitudeDetailController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeDetailController.#ctor(AdminTemplate.service.Services.LatitudeDetailService)">
+            <summary>
+            
+            </summary>
+            <param name="service"></param>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeDetailController.GetListLat(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="mbDetailId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeDetailController.UpdateItemMbDetailItem(System.Collections.Generic.List{AdminTemplate.service.Dto.MbDetail.UpdateMbDetailItemDto})">
+            <summary>
+            
+            </summary>
+            <param name="list"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AdminTemplate.Controllers.LatitudeGradeController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeGradeController.#ctor(AdminTemplate.service.Services.LatitudeGradeService)">
+            <summary>
+            
+            </summary>
+            <param name="service"></param>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeGradeController.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeGradeController.GetMbDetail(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeGradeController.Delete(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeGradeController.SaveUpdate(AdminTemplate.service.Dto.MbGrade.MbGradeDto)">
+            <summary>
+            
+            </summary>
+            <param name="from"></param>
+            <returns></returns>
+        </member>
         <member name="T:AdminTemplate.Controllers.QtDetailController">
             <summary>
             
@@ -64,6 +125,14 @@
             
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AdminTemplate.Controllers.QtDetailController.GetResult(System.String,System.String)">
+            <summary>
+            根据id获取问卷结果
+            </summary>
+            <param name="id"></param>
+            <param name="batchNumber"></param>
             <returns></returns>
         </member>
         <member name="M:AdminTemplate.Controllers.QtDetailController.GetStudentAll(System.String,GlobalConfiguration.Utility.PaginationStartAndLengthFilter)">
@@ -87,6 +156,15 @@
             
             </summary>
             <param name="listParam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AdminTemplate.Controllers.QtDetailController.SelectResultSimple(System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="studentIdCard"></param>
+            <param name="mbId"></param>
             <returns></returns>
         </member>
     </members>

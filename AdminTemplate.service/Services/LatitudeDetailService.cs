@@ -160,21 +160,38 @@ namespace AdminTemplate.service.Services
 
 		public NetResult UpdateItemMbDetailItem(List<UpdateMbDetailItemDto> list)
 		{
-			list.ForEach(d =>
-			{
-				var model = DbContext.MbDetailItem.FirstOrDefault(p => p.Id.Equals(d.Id));
-				if (model != null)
-				{
-					if (d.LatitudeDetailIds != null)
-					{
-						model.LatitudeDetailIds = d.LatitudeDetailIds;
-						DbContext.MbDetailItem.Update(model);
-					}
-				}
-				DbContext.SaveChanges();
-			});
+         
+            if (list!=null&&list.Count>0)
+            {
+                var ids = list.Select(s => s.Id).ToList();
+               var listMbDetailItem= DbContext.MbDetailItem.AsNoTracking().Where(p => ids.Contains(p.Id)).ToList();
+               List<MbDetailItem> lists=new List<MbDetailItem>();
+                list.ForEach(d =>
+                {
+                    var model = listMbDetailItem.FirstOrDefault(p => p.Id.Equals(d.Id));
+                    if (model != null)
+                    {
+                        if (d.LatitudeDetailIds != null)
+                        {
+                            model.LatitudeDetailIds = d.LatitudeDetailIds;
+                            lists.Add(model);
+                           
+                        }
+                    }
+                 
+                });
+                DbContext.MbDetailItem.UpdateRange(lists);
+                DbContext.SaveChanges();
+                return ResponseBodyEntity();
+            }
+            else
+            {
+                return ResponseBodyEntity("",EnumResult.Error,"获取对象为空");
+            }
 
-			return ResponseBodyEntity();
-		}
+
+
+
+        }
 	}
 }
