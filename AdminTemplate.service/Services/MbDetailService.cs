@@ -11,243 +11,243 @@ using System.Linq;
 
 namespace AdminTemplate.service.Services
 {
-    public class MbDetailService : BaseService
-    {
-        public NetResult Get(string id)
-        {
-            var query = DbContext.MbDetail.Include(o => o.MbDetailItem).AsNoTracking();
-            var model = query.FirstOrDefault(p => p.Id.Equals(id));
-            return ResponseBodyEntity(model);
-        }
-        public NetResult SaveUpdate(MbDetailDto form)
-        {
-            MbDetail model;
-            if (form.Id == null)
-            {
-                System.DateTime startTime = TimeZoneInfo.ConvertTimeToUtc(new System.DateTime(1970, 1, 1));
-                model = new MbDetail();
-                model.Id = DateTime.Now.Ticks.ToString();
-                model.UserId = form.UserId;
-                model.Title = form.Title;
-                model.Content = form.Content;
-                
+	public class MbDetailService : BaseService
+	{
+		public NetResult Get(string id)
+		{
+			var query = DbContext.MbDetail.Include(o => o.MbDetailItem).AsNoTracking();
+			var model = query.FirstOrDefault(p => p.Id.Equals(id));
+			return ResponseBodyEntity(model);
+		}
+		public NetResult SaveUpdate(MbDetailDto form)
+		{
+			MbDetail model;
+			if (form.Id == null)
+			{
+				System.DateTime startTime = TimeZoneInfo.ConvertTimeToUtc(new System.DateTime(1970, 1, 1));
+				model = new MbDetail();
+				model.Id = DateTime.Now.Ticks.ToString();
+				model.UserId = form.UserId;
+				model.Title = form.Title;
+				model.Content = form.Content;
+
 				model = DbContext.MbDetail.Add(model).Entity;
-                DbContext.SaveChanges();
-                return ResponseBodyEntity(model);
-            }
+				DbContext.SaveChanges();
+				return ResponseBodyEntity(model);
+			}
 
-            var query = DbContext.MbDetail.AsNoTracking();
-            model = query.FirstOrDefault(p => p.Id.Equals(form.Id));
-            if (model != null)
-            {
-                model.Title = form.Title;
-                model.Content = form.Content;
-                model = DbContext.MbDetail.Update(model).Entity;
-                DbContext.SaveChanges();
-                return ResponseBodyEntity(model);
-            }
-            else
-            {
-                return ResponseBodyEntity("", EnumResult.Error, "id未找到");
-            }
-        }
+			var query = DbContext.MbDetail.AsNoTracking();
+			model = query.FirstOrDefault(p => p.Id.Equals(form.Id));
+			if (model != null)
+			{
+				model.Title = form.Title;
+				model.Content = form.Content;
+				model = DbContext.MbDetail.Update(model).Entity;
+				DbContext.SaveChanges();
+				return ResponseBodyEntity(model);
+			}
+			else
+			{
+				return ResponseBodyEntity("", EnumResult.Error, "id未找到");
+			}
+		}
 
-        public NetResult Delete(string id)
-        {
-            var model = DbContext.MbDetail.FirstOrDefault(p => p.Id.Equals(id));
-            if (model != null)
-            {
-                DbContext.MbDetail.Remove(model);
-                DbContext.SaveChanges();
-                return ResponseBodyEntity();
-            }
-            return ResponseBodyEntity("", EnumResult.Error, "id未找到");
-        }
+		public NetResult Delete(string id)
+		{
+			var model = DbContext.MbDetail.FirstOrDefault(p => p.Id.Equals(id));
+			if (model != null)
+			{
+				DbContext.MbDetail.Remove(model);
+				DbContext.SaveChanges();
+				return ResponseBodyEntity();
+			}
+			return ResponseBodyEntity("", EnumResult.Error, "id未找到");
+		}
 
-        public NetResult UpdateMbDetail(UpdateMbDetailDto form)
-        {
-	        if (form==null)
-	        {
-				return ResponseBodyEntity("",EnumResult.Error,"提交的值为空");
+		public NetResult UpdateMbDetail(UpdateMbDetailDto form)
+		{
+			if (form == null)
+			{
+				return ResponseBodyEntity("", EnumResult.Error, "提交的值为空");
 
 			}
-            var model = DbContext.MbDetailItem.FirstOrDefault(p =>
-                p.DetailId.Equals(form.DetailId) && p.Order == form.Sort);
-            MbDetailItem model2 = null;
-            if (form.Type == 0)
-            {
-                model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
-                  p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort - 1));
-            }
-            else if ((form.Type == 1))
-            {
-                model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
-                  p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort + 1));
-            }
+			var model = DbContext.MbDetailItem.FirstOrDefault(p =>
+				p.DetailId.Equals(form.DetailId) && p.Order == form.Sort);
+			MbDetailItem model2 = null;
+			if (form.Type == 0)
+			{
+				model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
+				  p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort - 1));
+			}
+			else if ((form.Type == 1))
+			{
+				model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
+				  p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort + 1));
+			}
 
-            if (model != null && model2 != null)
-            {
-                var i = model2.Order;
-                model2.Order = model.Order;
-                model.Order = i;
-                DbContext.MbDetailItem.Update(model2);
-                DbContext.MbDetailItem.Update(model);
-            }
+			if (model != null && model2 != null)
+			{
+				var i = model2.Order;
+				model2.Order = model.Order;
+				model.Order = i;
+				DbContext.MbDetailItem.Update(model2);
+				DbContext.MbDetailItem.Update(model);
+			}
 
-            DbContext.SaveChanges();
-            return ResponseBodyEntity(new { model, model2 });
+			DbContext.SaveChanges();
+			return ResponseBodyEntity(new { model, model2 });
 
-        }
-        public NetResult DeleteItem(string id)
-        {
+		}
+		public NetResult DeleteItem(string id)
+		{
 
-            var model = DbContext.MbDetailItem.FirstOrDefault(p => p.Id.Equals(id));
-            if (model == null) return ResponseBodyEntity("", EnumResult.Error, "id不存在");
-            DbContext.MbDetailItem.Remove(model);
-            DbContext.SaveChanges();
-            return ResponseBodyEntity();
+			var model = DbContext.MbDetailItem.FirstOrDefault(p => p.Id.Equals(id));
+			if (model == null) return ResponseBodyEntity("", EnumResult.Error, "id不存在");
+			DbContext.MbDetailItem.Remove(model);
+			DbContext.SaveChanges();
+			return ResponseBodyEntity();
 
-        }
-        public NetResult GetList(string userId, PaginationStartAndLengthFilter filter)
-        {
-            var query = DbContext.MbDetail.AsNoTracking();
-            query = query.Where(p => p.UserId.Equals(userId));
-            query = query.Where(p => p.UserId.Equals(userId));
-            int count = query.Count();
-            var list = query.Skip(filter.Start).Take(filter.Length).OrderByDescending(
-                o => o.Order).ToList();
-            return ResponseBodyEntity(list, count);
-        }
-        public NetResult Save(MbDetailDto form)
-        {
-            MbDetail model = Mapper.Map<MbDetail>(form);
-            model.Id = Guid.NewGuid().ToString("N");
-            DbContext.MbDetail.Add(model);
-            DbContext.SaveChanges();
-            return ResponseBodyEntity();
-        }
-        public NetResult GetListItem(string detailId)
-        {
-            var list = DbContext.MbDetailItem.AsNoTracking().OrderBy(o => o.Order).Where(p => p.DetailId.Equals(detailId)).ToList();
+		}
+		public NetResult GetList(string userId, PaginationStartAndLengthFilter filter)
+		{
+			var query = DbContext.MbDetail.AsNoTracking();
+			query = query.Where(p => p.UserId.Equals(userId));
+			query = query.Where(p => p.UserId.Equals(userId));
+			int count = query.Count();
+			var list = query.Skip(filter.Start).Take(filter.Length).OrderByDescending(
+				o => o.Order).ToList();
+			return ResponseBodyEntity(list, count);
+		}
+		public NetResult Save(MbDetailDto form)
+		{
+			MbDetail model = Mapper.Map<MbDetail>(form);
+			model.Id = Guid.NewGuid().ToString("N");
+			DbContext.MbDetail.Add(model);
+			DbContext.SaveChanges();
+			return ResponseBodyEntity();
+		}
+		public NetResult GetListItem(string detailId)
+		{
+			var list = DbContext.MbDetailItem.AsNoTracking().OrderBy(o => o.Order).Where(p => p.DetailId.Equals(detailId)).ToList();
 
-            return ResponseBodyEntity(list);
-        }
+			return ResponseBodyEntity(list);
+		}
 
-        public NetResult ListSaveItem(List<MbDetailItemDto> list)
-        {
-            if (list != null)
-            {
-                list.ForEach(this.UpdateSaveItem);
-                DbContext.SaveChanges();
-                return ResponseBodyEntity();
-            }
-            return ResponseBodyEntity();
-        }
+		public NetResult ListSaveItem(List<MbDetailItemDto> list)
+		{
+			if (list != null)
+			{
+				list.ForEach(this.UpdateSaveItem);
+				DbContext.SaveChanges();
+				return ResponseBodyEntity();
+			}
+			return ResponseBodyEntity();
+		}
 
-        public void UpdateSaveItem(MbDetailItemDto form)
-        {
-            MbDetailItem model = Mapper.Map<MbDetailItem>(form);
-            if (form.Id == null)
-            {
-                model.Id = Guid.NewGuid().ToString("N");
-                var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
-                if (m != null) model.Order = m.Order + 1;
-                if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
-                {
-                    model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
-                    var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
-                    if (ls != null)
-                    {
-                        var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
-                        model.LatitudeDetailId = ml?.Id;
-                        model.LatitudeDetailName = ml?.Name;
-                         
+		public void UpdateSaveItem(MbDetailItemDto form)
+		{
+			MbDetailItem model = Mapper.Map<MbDetailItem>(form);
+			if (form.Id == null)
+			{
+				model.Id = Guid.NewGuid().ToString("N");
+				var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
+				if (m != null) model.Order = m.Order + 1;
+				if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
+				{
+					model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
+					var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
+					if (ls != null)
+					{
+						var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
+						model.LatitudeDetailId = ml?.Id;
+						model.LatitudeDetailName = ml?.Name;
+
 
 					}
-                }
-                else
-                {
-                    model.LatitudeDetailIds = null;
-                }
-
-
-                DbContext.MbDetailItem.Add(model);
-            }
-            else
-            {
-                if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
-                {
-                    model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
-                    var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
-                    if (ls != null)
-                    {
-                        var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
-                        model.LatitudeDetailId = ml?.Id;
-                        model.LatitudeDetailName = ml?.Name;
-                    }
-                    DbContext.MbDetailItem.Update(model);
+				}
+				else
+				{
+					model.LatitudeDetailIds = null;
 				}
 
-            }
 
-        }
-        public NetResult SaveItem(MbDetailItemDto form)
-        {
-            MbDetailItem model = Mapper.Map<MbDetailItem>(form);
-            if (form.Id == null)
-            {
-                model.Id = Guid.NewGuid().ToString("N");
-                var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
-                if (m != null) model.Order = m.Order + 1;
-                if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
-                {
-                    model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
-                    var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
-                    if (ls != null)
-                    {
-                        var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
-                        model.LatitudeDetailId = ml?.Id;
-                        model.LatitudeDetailName = ml?.Name;
-                    }
-                }
-                else
-                {
-                    model.LatitudeDetailIds = null;
-                }
+				DbContext.MbDetailItem.Add(model);
+			}
+			else
+			{
+				if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
+				{
+					model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
+					var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
+					if (ls != null)
+					{
+						var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
+						model.LatitudeDetailId = ml?.Id;
+						model.LatitudeDetailName = ml?.Name;
+					}
 
-
-                DbContext.MbDetailItem.Add(model);
-            }
-            else
-            {
-                if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
-                {
-                    model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
-                    var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
-                    if (ls != null)
-                    {
-                        var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
-                        model.LatitudeDetailId = ml?.Id;
-                        model.LatitudeDetailName = ml?.Name;
-                    }
-                    DbContext.MbDetailItem.Update(model);
 				}
-               
+				DbContext.MbDetailItem.Update(model);
+			}
 
-            }
-            DbContext.SaveChanges();
-            return ResponseBodyEntity();
-        }
+		}
+		public NetResult SaveItem(MbDetailItemDto form)
+		{
+			MbDetailItem model = Mapper.Map<MbDetailItem>(form);
+			if (form.Id == null)
+			{
+				model.Id = Guid.NewGuid().ToString("N");
+				var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
+				if (m != null) model.Order = m.Order + 1;
+				if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
+				{
+					model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
+					var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
+					if (ls != null)
+					{
+						var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
+						model.LatitudeDetailId = ml?.Id;
+						model.LatitudeDetailName = ml?.Name;
+					}
+				}
+				else
+				{
+					model.LatitudeDetailIds = null;
+				}
+
+
+				DbContext.MbDetailItem.Add(model);
+			}
+			else
+			{
+				if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
+				{
+					model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);
+					var ls = form.LatitudeDetailIds[form.LatitudeDetailIds.Count - 1];
+					if (ls != null)
+					{
+						var ml = DbContext.LatitudeDetail.FirstOrDefault(p => p.Id.Equals(ls));
+						model.LatitudeDetailId = ml?.Id;
+						model.LatitudeDetailName = ml?.Name;
+					}
+					DbContext.MbDetailItem.Update(model);
+				}
+
+
+			}
+			DbContext.SaveChanges();
+			return ResponseBodyEntity();
+		}
 
 		/**
 		 *
 		 */
-        public NetResult GetSetWd(string detailId)
-        {
-			 
-	        DbContext.MbDetailItem.Where(p => p.DetailId.Equals(detailId)).OrderBy(o => o.Order).ToList();
+		public NetResult GetSetWd(string detailId)
+		{
+
+			DbContext.MbDetailItem.Where(p => p.DetailId.Equals(detailId)).OrderBy(o => o.Order).ToList();
 			return ResponseBodyEntity();
 		}
 
-    }
+	}
 }

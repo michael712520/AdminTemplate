@@ -29,7 +29,32 @@ namespace AdminTemplate.service.Services
 			{
 				model.QtLatitudeDetail = DbContext.QtLatitudeDetail.Include(o => o.LatitudeDetail)
 					.Where(p => p.BatchNumber.Equals(batchNumber)).ToList();
-				return ResponseBodyEntity(model);
+
+				var listLatitudeGrade = DbContext.LatitudeGrade.Where(p => model.QtLatitudeDetail.Select(s => s.LatitudeDetailId).Contains(p.LatitudeDetailId)).ToList();
+
+				List<QtDetailItemResult> lik = new List<QtDetailItemResult>();
+				model.QtLatitudeDetail.ToList().ForEach(d =>
+				{
+					QtDetailItemResult kModel = new QtDetailItemResult();
+					kModel.Id = d.LatitudeDetailId;
+					kModel.Name = d.LatitudeDetail.Name;
+					kModel.Score = d.Score;
+
+					listLatitudeGrade.ForEach(e =>
+					{
+						if (e.UpScore <= d.Score && d.Score <= e.DownScore)
+						{
+							kModel.describe = e.Titile;
+						}
+						else if (d.Score >= e.DownScore)
+						{
+							kModel.describe = e.Titile;
+						}
+					});
+
+					lik.Add(kModel);
+				});
+				return ResponseBodyEntity(new { bt = model.Title, context = model.Content, list = lik, qtLatitudeDetail = model.QtLatitudeDetail.ToList() });
 			}
 			return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
 		}
