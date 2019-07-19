@@ -17,6 +17,7 @@ namespace AdminTemplate.service.Services
 		{
 			var query = DbContext.MbDetail.Include(o => o.MbDetailItem).AsNoTracking();
 			var model = query.FirstOrDefault(p => p.Id.Equals(id));
+			model.MbDetailItem = model.MbDetailItem.OrderBy(o => o.Order).ToList();
 			return ResponseBodyEntity(model);
 		}
 		public NetResult SaveUpdate(MbDetailDto form)

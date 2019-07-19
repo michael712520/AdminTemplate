@@ -16,7 +16,7 @@ namespace AdminTemplate.service.Services
 		{
 
 			var mj = DbContext.QtDetail.AsNoTracking()
-				.Where(p => p.StudentIdCard.Equals(studentIdCard) && p.TeacherIdCard.Equals(teacherIdCard)).OrderByDescending(o => o.CreateTime)
+				.Where(p => p.StudentIdCard.Equals(studentIdCard) && p.TeacherIdCard.Equals(teacherIdCard) && p.MbDetailId.Equals(mbQuestionId)).OrderByDescending(o => o.CreateTime)
 				.FirstOrDefault();
 			if (mj != null)
 			{

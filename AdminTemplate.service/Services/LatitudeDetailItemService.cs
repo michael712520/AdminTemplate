@@ -86,6 +86,11 @@ namespace AdminTemplate.service.Services
 		{
 			var query = DbContext.LatitudeDetailItem.AsNoTracking();
 
+			if (id != null)
+			{
+				query = query.Where(p => p.MbDetailId.Equals(id));
+
+			}
 			if (filter.Keywords != null)
 			{
 				query = query.Where(p => p.Name.Contains(filter.Keywords));

@@ -40,17 +40,17 @@ namespace AdminTemplate.service.Services
 					kModel.Name = d.LatitudeDetail.Name;
 					kModel.Score = d.Score;
 
-					listLatitudeGrade.ForEach(e =>
-					{
-						if (e.UpScore <= d.Score && d.Score <= e.DownScore)
-						{
-							kModel.describe = e.Titile;
-						}
-						else if (d.Score >= e.DownScore)
-						{
-							kModel.describe = e.Titile;
-						}
-					});
+					listLatitudeGrade.Where(p => p.LatitudeDetailId.Equals(d.LatitudeDetailId)).ToList().ForEach(e =>
+					  {
+						  if (e.UpScore <= d.Score && d.Score <= e.DownScore)
+						  {
+							  kModel.describe = e.Titile;
+						  }
+						  else if (d.Score >= e.DownScore)
+						  {
+							  kModel.describe = e.Titile;
+						  }
+					  });
 
 					lik.Add(kModel);
 				});
