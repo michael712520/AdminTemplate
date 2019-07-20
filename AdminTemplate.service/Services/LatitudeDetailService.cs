@@ -118,7 +118,7 @@ namespace AdminTemplate.service.Services
 				return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
 			}
 
-			var listMbDetailItem = model.MbDetailItem.ToList();
+			var listMbDetailItem = model.MbDetailItem.OrderBy(o=>o.Order).Where(p => p.Type.Equals("pfdanxuan") || p.Type.Equals("pfduoxuan")).ToList();
 			listMbDetailItem.ForEach(d =>
 			{
 				if (d.Type == "pfdanxuan" || d.Type == "pfduoxuan")
@@ -139,7 +139,7 @@ namespace AdminTemplate.service.Services
 			});
 			var latitudeDetailIds = listMbDetailItem.Select(s => s.LatitudeDetailIds);
 			var latitudeDetailItems = DbContext.LatitudeDetailItem.Where(p => latitudeDetailIds.Contains(p.Id)).ToList();
-			var enumerable = listMbDetailItem.Select((s, i) => new
+			var enumerable = listMbDetailItem.OrderBy(s=>s.Order).Select((s, i) => new
 			{
 				rowKey = i + 1,
 				id = s.Id,
@@ -147,13 +147,13 @@ namespace AdminTemplate.service.Services
 				type = s.Type,
 				latitudeDetailId = latitudeDetailItems.FirstOrDefault(p => p.Id.Equals(s.LatitudeDetailIds))?.Id,
 				name = latitudeDetailItems.FirstOrDefault(p => p.Id.Equals(s.LatitudeDetailIds))?.Name
-			}).OrderBy(o => o.rowKey).ToList();
+			}).ToList();
 			var latitudeDetailItem = DbContext.LatitudeDetailItem.Where(p => p.MbDetailId.Equals(mbDetailId)).ToList();
 			return ResponseBodyEntity(new
 			{
 				id = model.Id,
 				title = model.Title,
-				latitudeDetailItem = latitudeDetailItem,
+				latitudeDetailItem = latitudeDetailItem.OrderBy(o=>o.Score),
 				MbDetailItems = enumerable
 			});
 		}

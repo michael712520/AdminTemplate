@@ -37,7 +37,7 @@ namespace AdminTemplate.DataBase.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity<LatitudeDetail>(entity =>
             {
@@ -155,7 +155,6 @@ namespace AdminTemplate.DataBase.Models
 
                 entity.Property(e => e.Content)
                     .HasColumnName("content")
-                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CreateTime)
@@ -173,7 +172,6 @@ namespace AdminTemplate.DataBase.Models
 
                 entity.Property(e => e.Titile)
                     .HasColumnName("titile")
-                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.UpScore)
