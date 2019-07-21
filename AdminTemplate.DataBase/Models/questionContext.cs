@@ -15,6 +15,7 @@ namespace AdminTemplate.DataBase.Models
         {
         }
 
+        public virtual DbSet<LatitudeCategory> LatitudeCategory { get; set; }
         public virtual DbSet<LatitudeDetail> LatitudeDetail { get; set; }
         public virtual DbSet<LatitudeDetailItem> LatitudeDetailItem { get; set; }
         public virtual DbSet<LatitudeGrade> LatitudeGrade { get; set; }
@@ -38,6 +39,40 @@ namespace AdminTemplate.DataBase.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
+            modelBuilder.Entity<LatitudeCategory>(entity =>
+            {
+                entity.ToTable("latitude_category", "question");
+
+                entity.HasIndex(e => e.LatitudeDetailId)
+                    .HasName("latitude_detail_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.LatitudeDetailId)
+                    .HasColumnName("latitude_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MbDetailId)
+                    .HasColumnName("mb_detail_id")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.LatitudeDetail)
+                    .WithMany(p => p.LatitudeCategory)
+                    .HasForeignKey(d => d.LatitudeDetailId)
+                    .HasConstraintName("latitude_category_ibfk_1");
+            });
 
             modelBuilder.Entity<LatitudeDetail>(entity =>
             {
