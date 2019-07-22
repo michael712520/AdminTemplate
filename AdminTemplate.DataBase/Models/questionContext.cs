@@ -38,14 +38,11 @@ namespace AdminTemplate.DataBase.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity<LatitudeCategory>(entity =>
             {
                 entity.ToTable("latitude_category", "question");
-
-                entity.HasIndex(e => e.LatitudeDetailId)
-                    .HasName("latitude_detail_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -53,9 +50,8 @@ namespace AdminTemplate.DataBase.Models
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.LatitudeDetailId)
-                    .HasColumnName("latitude_detail_id")
-                    .HasMaxLength(32)
+                entity.Property(e => e.LatitudeDetails)
+                    .HasColumnName("latitude_details")
                     .IsUnicode(false);
 
                 entity.Property(e => e.MbDetailId)
@@ -67,11 +63,6 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("name")
                     .HasMaxLength(255)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.LatitudeDetail)
-                    .WithMany(p => p.LatitudeCategory)
-                    .HasForeignKey(d => d.LatitudeDetailId)
-                    .HasConstraintName("latitude_category_ibfk_1");
             });
 
             modelBuilder.Entity<LatitudeDetail>(entity =>
