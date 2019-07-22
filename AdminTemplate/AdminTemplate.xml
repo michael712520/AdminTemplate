@@ -45,6 +45,38 @@
             <param name="mbQuestionId"></param>
             <returns></returns>
         </member>
+        <member name="T:AdminTemplate.Controllers.LatitudeCategoryController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeCategoryController.#ctor(AdminTemplate.service.Services.LatitudeCategoryService)">
+            <summary>
+            
+            </summary>
+            <param name="service"></param>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeCategoryController.List(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="mbDetailId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeCategoryController.SaveOrUpdate(AdminTemplate.service.Dto.LatitudeCategory.LatitudeCategoryDto)">
+            <summary>
+            
+            </summary>
+            <param name="form"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AdminTemplate.Controllers.LatitudeCategoryController.Delete(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:AdminTemplate.Controllers.LatitudeDetailController">
             <summary>
             
