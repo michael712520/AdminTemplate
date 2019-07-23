@@ -24,37 +24,68 @@ namespace AdminTemplate.service.Services
 		}
 		public NetResult GetResult(string id, string batchNumber)
 		{
+
+
 			var model = DbContext.QtDetail.AsNoTracking().FirstOrDefault(p => p.Id.Equals(id));
 			if (model != null)
 			{
 				model.QtLatitudeDetail = DbContext.QtLatitudeDetail.Include(o => o.LatitudeDetail)
 					.Where(p => p.BatchNumber.Equals(batchNumber)).ToList();
 
+
+
+				var listLatitudeCategory = DbContext.LatitudeCategory.AsNoTracking().Where(p => p.MbDetailId.Equals(model.MbDetailId)).ToList();
 				var listLatitudeGrade = DbContext.LatitudeGrade.Where(p => model.QtLatitudeDetail.Select(s => s.LatitudeDetailId).Contains(p.LatitudeDetailId)).ToList();
 
-				List<QtDetailItemResult> lik = new List<QtDetailItemResult>();
-				model.QtLatitudeDetail.ToList().ForEach(d =>
+				string GetDescribe(double? score, string latitudeDetailId)
 				{
-					QtDetailItemResult kModel = new QtDetailItemResult();
-					kModel.Id = d.LatitudeDetailId;
-					kModel.Name = d.LatitudeDetail.Name;
-					kModel.Score = d.Score;
+					string returner = null;
+					listLatitudeGrade.Where(p => p.LatitudeDetailId.Equals(latitudeDetailId)).ToList().ForEach(e =>
+					{
+						if (e.UpScore <= score && score <= e.DownScore)
+						{
+							returner = e.Titile;
+						}
+						else if (score >= e.DownScore)
+						{
+							returner = e.Titile;
+						}
+					});
+					return returner;
+				}
+				object LatitudeDetailIds(string str)
+				{
 
-					listLatitudeGrade.Where(p => p.LatitudeDetailId.Equals(d.LatitudeDetailId)).ToList().ForEach(e =>
-					  {
-						  if (e.UpScore <= d.Score && d.Score <= e.DownScore)
-						  {
-							  kModel.describe = e.Titile;
-						  }
-						  else if (d.Score >= e.DownScore)
-						  {
-							  kModel.describe = e.Titile;
-						  }
-					  });
+					if (str != null)
+					{
+						try
+						{
+							return model.QtLatitudeDetail.Where(p => str.Contains(p.LatitudeDetailId)).ToList().Select(s =>
+								new QtDetailItemResult
+								{
+									Id = s.Id,
+									Name = s.LatitudeDetail.Name,
+									Score = s.Score,
+									maxScore = s.LatitudeDetail.Score,
+									describe = GetDescribe(s.Score, s.LatitudeDetailId)
+								}).ToList();
+						}
+						catch (Exception e)
+						{
+							Console.WriteLine(e);
 
-					lik.Add(kModel);
-				});
-				return ResponseBodyEntity(new { bt = model.Title, context = model.Content, list = lik, qtLatitudeDetail = model.QtLatitudeDetail.ToList() });
+						}
+					}
+
+					return null;
+				}
+				var data = listLatitudeCategory.Where(p => p.LatitudeDetails != null).Select(item => new
+				{
+					name = item.Name,
+					latitudeDetailIds = LatitudeDetailIds(item.LatitudeDetails),
+					//list = model.QtLatitudeDetail.Where(p => item.LatitudeDetails.Contains(p.LatitudeDetailId)).ToList()
+				}).ToList();
+				return ResponseBodyEntity(data);
 			}
 			return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
 		}
@@ -106,9 +137,9 @@ namespace AdminTemplate.service.Services
 						p.QtDetailId.Equals(id) && (p.Type.Equals("pfduoxuan") || p.Type.Equals("pfdanxuan"))).ToList();
 					var listLatitude = DbContext.LatitudeDetail.Where(p => p.MbDetailId.Equals(mbId)).ToList();
 					Dictionary<string, double> myDictionary = new Dictionary<string, double>();
-					
-                    var listLatitudeDetailItem=DbContext.LatitudeDetailItem.Where(p => p.MbDetailId.Equals(mbId))
-                        .Select(s => new QtDetailItemResult { Id = s.Id, Score = 0}).ToList();
+
+					var listLatitudeDetailItem = DbContext.LatitudeDetailItem.Where(p => p.MbDetailId.Equals(mbId))
+						.Select(s => new QtDetailItemResult { Id = s.Id, Score = 0 }).ToList();
 					listQtDetailItem.ForEach(d =>
 					{
 						try
@@ -147,17 +178,17 @@ namespace AdminTemplate.service.Services
 									}
 								}
 
-                                listLatitudeDetailItem.ForEach(ldi =>
-                                {
-                                    if (ldi.Id.Equals(key[0].Value))
-                                    {
-                                        ldi.Score += score;
-                                    }
+								listLatitudeDetailItem.ForEach(ldi =>
+								{
+									if (ldi.Id.Equals(key[0].Value))
+									{
+										ldi.Score += score;
+									}
 
-                                });
+								});
 
 
-                            }
+							}
 
 						}
 						catch (Exception e)
@@ -189,13 +220,13 @@ namespace AdminTemplate.service.Services
 						{
 
 
-							if (relationship.ax.s != null && relationship.cx.s.Count > 0 && relationship.ax.v.Value>0)
-                            {
+							if (relationship.ax.s != null && relationship.cx.s.Count > 0 && relationship.ax.v.Value > 0)
+							{
 
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
 
-                                
+
 								if (outStr > 0)
 								{
 									total = total + outStr * relationship.ax.v.Value;
@@ -203,231 +234,231 @@ namespace AdminTemplate.service.Services
 
 
 							}
-							if (relationship.bx.s != null && relationship.bx.s.Count > 0 && relationship.bx.v.Value>0)
+							if (relationship.bx.s != null && relationship.bx.s.Count > 0 && relationship.bx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.bx.v.Value;
 								}
 
 
 							}
-							if (relationship.cx.s != null && relationship.cx.s.Count > 0 && relationship.cx.v.Value>0)
+							if (relationship.cx.s != null && relationship.cx.s.Count > 0 && relationship.cx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.cx.v.Value;
 								}
 
 
 							}
-							if (relationship.dx.s != null && relationship.dx.s.Count > 0 && relationship.dx.v.Value>0)
+							if (relationship.dx.s != null && relationship.dx.s.Count > 0 && relationship.dx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.dx.v.Value;
 								}
 
 
 							}
-							if (relationship.ex.s != null && relationship.ex.s.Count > 0 && relationship.ex.v.Value>0)
+							if (relationship.ex.s != null && relationship.ex.s.Count > 0 && relationship.ex.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.ex.v.Value;
 								}
 
 
 							}
-							if (relationship.fx.s != null && relationship.fx.s.Count > 0 && relationship.fx.v.Value>0)
+							if (relationship.fx.s != null && relationship.fx.s.Count > 0 && relationship.fx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.fx.v.Value;
 								}
 
 
 							}
-							if (relationship.gx.s != null && relationship.gx.s.Count > 0 && relationship.gx.v.Value>0)
+							if (relationship.gx.s != null && relationship.gx.s.Count > 0 && relationship.gx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.gx.v.Value;
 								}
 
 
 							}
-							if (relationship.hx.s != null && relationship.hx.s.Count > 0 && relationship.hx.v.Value>0)
+							if (relationship.hx.s != null && relationship.hx.s.Count > 0 && relationship.hx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.hx.v.Value;
 								}
 
 
 							}
-							if (relationship.ix.s != null && relationship.ix.s.Count > 0 && relationship.ix.v.Value>0)
+							if (relationship.ix.s != null && relationship.ix.s.Count > 0 && relationship.ix.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.ix.v.Value;
 								}
 
 
 							}
-							if (relationship.jx != null && relationship.jx.s != null && relationship.jx.s.Count > 0 && relationship.jx.v.Value>0)
+							if (relationship.jx != null && relationship.jx.s != null && relationship.jx.s.Count > 0 && relationship.jx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.jx.v.Value;
 								}
 
 
 							}
-							if (relationship.kx != null && relationship.kx.s != null && relationship.kx.s.Count > 0 && relationship.kx.v.Value>0)
+							if (relationship.kx != null && relationship.kx.s != null && relationship.kx.s.Count > 0 && relationship.kx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.kx.v.Value;
 								}
 
 
 							}
-							if (relationship.mx != null && relationship.mx.s != null && relationship.mx.s.Count > 0 && relationship.mx.v.Value>0)
+							if (relationship.mx != null && relationship.mx.s != null && relationship.mx.s.Count > 0 && relationship.mx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.mx.v.Value;
 								}
 
 
 							}
-							if (relationship.nx != null && relationship.nx.s != null && relationship.nx.s.Count > 0 && relationship.nx.v.Value>0)
+							if (relationship.nx != null && relationship.nx.s != null && relationship.nx.s.Count > 0 && relationship.nx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.nx.v.Value;
 								}
 
 
 							}
-							if (relationship.ox != null && relationship.ox.s != null && relationship.ox.s.Count > 0 && relationship.ox.v.Value>0)
+							if (relationship.ox != null && relationship.ox.s != null && relationship.ox.s.Count > 0 && relationship.ox.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.ox.v.Value;
 								}
 
 
 							}
-							if (relationship.px != null && relationship.px.s != null && relationship.px.s.Count > 0 && relationship.px.v.Value>0)
+							if (relationship.px != null && relationship.px.s != null && relationship.px.s.Count > 0 && relationship.px.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.px.v.Value;
 								}
 
 
 							}
-							if (relationship.qx != null && relationship.qx.s != null && relationship.qx.s.Count > 0 && relationship.qx.v.Value>0)
+							if (relationship.qx != null && relationship.qx.s != null && relationship.qx.s.Count > 0 && relationship.qx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.qx.v.Value;
 								}
 
 
 							}
-							if (relationship.rx != null && relationship.rx.s != null && relationship.rx.s.Count > 0 && relationship.rx.v.Value>0)
+							if (relationship.rx != null && relationship.rx.s != null && relationship.rx.s.Count > 0 && relationship.rx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.rx.v.Value;
 								}
 
 
 							}
-							if (relationship.sx != null && relationship.sx.s != null && relationship.sx.s.Count > 0 && relationship.sx.v.Value>0)
+							if (relationship.sx != null && relationship.sx.s != null && relationship.sx.s.Count > 0 && relationship.sx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.sx.v.Value;
 								}
 
 
 							}
-							if (relationship.tx != null && relationship.tx.s != null && relationship.tx.s.Count > 0 && relationship.tx.v.Value>0)
+							if (relationship.tx != null && relationship.tx.s != null && relationship.tx.s.Count > 0 && relationship.tx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.tx.v.Value;
 								}
 
 
 							}
-							if (relationship.ux != null && relationship.ux.s != null && relationship.ux.s.Count > 0 && relationship.ux.v.Value>0)
+							if (relationship.ux != null && relationship.ux.s != null && relationship.ux.s.Count > 0 && relationship.ux.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.ux.v.Value;
 								}
 
 
 							}
-							if (relationship.vx != null && relationship.vx.s != null && relationship.vx.s.Count > 0 && relationship.vx.v.Value>0)
+							if (relationship.vx != null && relationship.vx.s != null && relationship.vx.s.Count > 0 && relationship.vx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.vx.v.Value;
 								}
 
 
 							}
-							if (relationship.wx != null && relationship.wx.s != null && relationship.wx.s.Count > 0 && relationship.wx.v.Value>0)
+							if (relationship.wx != null && relationship.wx.s != null && relationship.wx.s.Count > 0 && relationship.wx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.wx.v.Value;
 								}
@@ -435,33 +466,33 @@ namespace AdminTemplate.service.Services
 
 							}
 
-							if (relationship.xx != null && relationship.xx.s != null && relationship.xx.s.Count > 0 && relationship.xx.v.Value>0)
+							if (relationship.xx != null && relationship.xx.s != null && relationship.xx.s.Count > 0 && relationship.xx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.xx.v.Value;
 								}
 
 
 							}
-							if (relationship.yx != null && relationship.yx.s != null && relationship.yx.s.Count > 0 && relationship.yx.v.Value>0)
+							if (relationship.yx != null && relationship.yx.s != null && relationship.yx.s.Count > 0 && relationship.yx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.yx.v.Value;
 								}
 
 
 							}
-							if (relationship.zx != null && relationship.zx.s != null && relationship.zx.s[0].Value != null && relationship.zx.v.Value>0)
+							if (relationship.zx != null && relationship.zx.s != null && relationship.zx.s[0].Value != null && relationship.zx.v.Value > 0)
 							{
-                                var outStr = listLatitudeDetailItem
-                                    .FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
-                                if (outStr > 0)
+								var outStr = listLatitudeDetailItem
+									.FirstOrDefault(p => p.Id.Equals(relationship.ax.s[0].Value))?.Score;
+								if (outStr > 0)
 								{
 									total = total + outStr * relationship.zx.v.Value;
 								}

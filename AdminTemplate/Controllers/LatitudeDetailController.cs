@@ -53,6 +53,11 @@ namespace AdminTemplate.Controllers
 		{
 			return _service.List(id, filter);
 		}
+		[HttpGet, Route("GetAll")]
+		public NetResult GetAll(string mbDetailId)
+		{
+			return _service.GetAll(mbDetailId);
+		}
 		[HttpGet, Route("GetPicker")]
 		public NetResult GetPicker()
 		{

@@ -109,7 +109,15 @@ namespace AdminTemplate.service.Services
 			var list = query.Skip(filter.Start).Take(filter.Length).OrderByDescending(o => o.Sort).ToList();
 			return ResponseBodyEntity(list, count);
 		}
-
+		public NetResult GetAll(string id)
+		{
+			var query = DbContext.LatitudeDetail.AsNoTracking();
+			if (id != null)
+			{
+				query = query.Where(p => p.MbDetailId.Equals(id));
+			}
+			return ResponseBodyEntity(query.ToList());
+		}
 		public NetResult GetListLat(string mbDetailId)
 		{
 			var model = DbContext.MbDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(mbDetailId));
@@ -118,7 +126,7 @@ namespace AdminTemplate.service.Services
 				return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
 			}
 
-			var listMbDetailItem = model.MbDetailItem.OrderBy(o=>o.Order).Where(p => p.Type.Equals("pfdanxuan") || p.Type.Equals("pfduoxuan")).ToList();
+			var listMbDetailItem = model.MbDetailItem.OrderBy(o => o.Order).Where(p => p.Type.Equals("pfdanxuan") || p.Type.Equals("pfduoxuan")).ToList();
 			listMbDetailItem.ForEach(d =>
 			{
 				if (d.Type == "pfdanxuan" || d.Type == "pfduoxuan")
@@ -139,7 +147,7 @@ namespace AdminTemplate.service.Services
 			});
 			var latitudeDetailIds = listMbDetailItem.Select(s => s.LatitudeDetailIds);
 			var latitudeDetailItems = DbContext.LatitudeDetailItem.Where(p => latitudeDetailIds.Contains(p.Id)).ToList();
-			var enumerable = listMbDetailItem.OrderBy(s=>s.Order).Select((s, i) => new
+			var enumerable = listMbDetailItem.OrderBy(s => s.Order).Select((s, i) => new
 			{
 				rowKey = i + 1,
 				id = s.Id,
@@ -153,45 +161,45 @@ namespace AdminTemplate.service.Services
 			{
 				id = model.Id,
 				title = model.Title,
-				latitudeDetailItem = latitudeDetailItem.OrderBy(o=>o.Score),
+				latitudeDetailItem = latitudeDetailItem.OrderBy(o => o.Score),
 				MbDetailItems = enumerable
 			});
 		}
 
 		public NetResult UpdateItemMbDetailItem(List<UpdateMbDetailItemDto> list)
 		{
-         
-            if (list!=null&&list.Count>0)
-            {
-                var ids = list.Select(s => s.Id).ToList();
-               var listMbDetailItem= DbContext.MbDetailItem.AsNoTracking().Where(p => ids.Contains(p.Id)).ToList();
-               List<MbDetailItem> lists=new List<MbDetailItem>();
-                list.ForEach(d =>
-                {
-                    var model = listMbDetailItem.FirstOrDefault(p => p.Id.Equals(d.Id));
-                    if (model != null)
-                    {
-                        if (d.LatitudeDetailIds != null)
-                        {
-                            model.LatitudeDetailIds = d.LatitudeDetailIds;
-                            lists.Add(model);
-                           
-                        }
-                    }
-                 
-                });
-                DbContext.MbDetailItem.UpdateRange(lists);
-                DbContext.SaveChanges();
-                return ResponseBodyEntity();
-            }
-            else
-            {
-                return ResponseBodyEntity("",EnumResult.Error,"获取对象为空");
-            }
+
+			if (list != null && list.Count > 0)
+			{
+				var ids = list.Select(s => s.Id).ToList();
+				var listMbDetailItem = DbContext.MbDetailItem.AsNoTracking().Where(p => ids.Contains(p.Id)).ToList();
+				List<MbDetailItem> lists = new List<MbDetailItem>();
+				list.ForEach(d =>
+				{
+					var model = listMbDetailItem.FirstOrDefault(p => p.Id.Equals(d.Id));
+					if (model != null)
+					{
+						if (d.LatitudeDetailIds != null)
+						{
+							model.LatitudeDetailIds = d.LatitudeDetailIds;
+							lists.Add(model);
+
+						}
+					}
+
+				});
+				DbContext.MbDetailItem.UpdateRange(lists);
+				DbContext.SaveChanges();
+				return ResponseBodyEntity();
+			}
+			else
+			{
+				return ResponseBodyEntity("", EnumResult.Error, "获取对象为空");
+			}
 
 
 
 
-        }
+		}
 	}
 }

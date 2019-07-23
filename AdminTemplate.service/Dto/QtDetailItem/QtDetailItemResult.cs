@@ -8,6 +8,8 @@ namespace AdminTemplate.service.Dto.QtDetailItem
 	{
 		public string Id { get; set; }
 		public double? Score { get; set; }
+		public double? maxScore { get; set; }
+
 		public string Name { get; set; }
 		public string describe { get; set; }
 	}
