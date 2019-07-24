@@ -81,8 +81,15 @@ namespace AdminTemplate.service.Services
                 qtDetail.QtDetailItem.Add(d);
             });
 
-            DbContext.QtDetail.Add(qtDetail);
+            qtDetail=DbContext.QtDetail.Add(qtDetail).Entity;
             DbContext.SaveChanges();
+
+              var da= DbContext.QtDetail.AsNoTracking().Include(o => o.QtDetailItem).FirstOrDefault(p => p.Id.Equals(qtDetail.Id));
+            if (da != null)
+            {
+                da.QtDetailItem = da.QtDetailItem.OrderBy(o => o.Order).ToList();
+                return ResponseBodyEntity(da);
+            }
             return ResponseBodyEntity();
         }
         public NetResult GetStudentList(string studentIdCard)

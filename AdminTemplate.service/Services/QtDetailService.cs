@@ -529,9 +529,11 @@ namespace AdminTemplate.service.Services
 							model.BatchNumber = qtDetailBatch.BatchNumber;
 							qtDetailBatch.QtLatitudeDetail.Add(model);
 						}
-						DbContext.QtDetailbatch.Add(qtDetailBatch);
+                      
+                        qtDetailBatch =DbContext.QtDetailbatch.Add(qtDetailBatch).Entity;
 						DbContext.SaveChanges();
-					}
+                        return ResponseBodyEntity(qtDetailBatch);
+                    }
 
 
 				}
@@ -579,6 +581,14 @@ namespace AdminTemplate.service.Services
 
 			return ResponseBodyEntity();
 		}
-
-	}
+        public NetResult SelectResult(string mbDetailId,PaginationStartAndLengthFilter filter)
+        {
+            var query= DbContext.QtDetailbatch.Where(p =>
+               p.QtDetail.MbDetailId.Equals(mbDetailId) && p.StudentIdCard.Equals(p.ForeignType) &&
+               p.ForeignType.Equals(p.TeacherIdCard)).OrderByDescending(o => o.CreateTime);
+          var count = query.Count();
+          var list = query.Skip(filter.Start).Take(filter.Length).ToList();
+           return ResponseBodyEntity(list,count);
+        }
+    }
 }

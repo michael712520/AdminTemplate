@@ -90,7 +90,17 @@ namespace AdminTemplate.Controllers
 		{
 			return _service.SelectResultSimple(id, studentIdCard, mbId);
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mbDetailId"></param>
+        /// <returns></returns>
+        [HttpGet, Route("SelectResult")]
+        public NetResult SelectResult(string mbDetailId, PaginationStartAndLengthFilter filter)
+        {
+            return _service.SelectResult(mbDetailId, filter);
+        }
 
 
-	}
+    }
 }
