@@ -58,8 +58,34 @@ namespace AdminTemplate.service.Services
 			callBack = HttpUtility.UrlEncode(callBack, System.Text.Encoding.GetEncoding(65001));
 			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}&callBack={callBack}");
 		}
+        public NetResult Add(string mbQuestionId)
+        {
+            string guid = Guid.NewGuid().ToString("N");
+            var model = DbContext.MbDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(mbQuestionId));
+            if (model == null)
+            {
+                return ResponseBodyEntity("", EnumResult.Error, "没有找到对应的问卷");
+            }
+            QtDetail qtDetail = Mapper.Map<QtDetail>(model);
+            qtDetail.Id = Guid.NewGuid().ToString("N");
+            qtDetail.TeacherIdCard = guid;
+            qtDetail.ForeignType = guid;
+            qtDetail.StudentIdCard = guid;
+            qtDetail.CallBack = guid;
+            List<QtDetailItem> items = Mapper.Map<List<QtDetailItem>>(model.MbDetailItem);
+            items.ForEach(d =>
+            {
+                d.Id = Guid.NewGuid().ToString("N");
+                d.QtDetailId = qtDetail.Id;
+                d.MbDetailId = model.Id;
+                qtDetail.QtDetailItem.Add(d);
+            });
 
-		public NetResult GetStudentList(string studentIdCard)
+            DbContext.QtDetail.Add(qtDetail);
+            DbContext.SaveChanges();
+            return ResponseBodyEntity();
+        }
+        public NetResult GetStudentList(string studentIdCard)
 		{
 
 			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentList?studentIdCard={studentIdCard}");
