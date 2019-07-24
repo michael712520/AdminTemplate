@@ -58,7 +58,7 @@ namespace AdminTemplate.service.Services
 			callBack = HttpUtility.UrlEncode(callBack, System.Text.Encoding.GetEncoding(65001));
 			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}&callBack={callBack}");
 		}
-        public NetResult Add(string mbQuestionId)
+        public NetResult AddLocal(string mbQuestionId)
         {
             string guid = Guid.NewGuid().ToString("N");
             var model = DbContext.MbDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(mbQuestionId));

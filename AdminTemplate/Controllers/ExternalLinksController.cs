@@ -31,7 +31,16 @@ namespace AdminTemplate.Controllers
         {
             return _service.Add(model.mbQuestionId, model.teacherIdCard, model.foreignType, model.studentIdCard, model.callBack);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mbQuestionId"></param>
+        /// <returns></returns>
+        [HttpPost, Route("AddLocal")]
+        public NetResult AddLocal(string mbQuestionId)
+        {
+            return _service.AddLocal(mbQuestionId);
+        }
         /// <summary>
         /// 查看某个学员所有评估的列表链接
         /// </summary>
