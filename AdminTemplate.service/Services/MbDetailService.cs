@@ -77,8 +77,9 @@ namespace AdminTemplate.service.Services
 			MbDetailItem model2 = null;
 			if (form.Type == 0)
 			{
-				model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
-				  p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort - 1));
+				model2 = DbContext.MbDetailItem.OrderByDescending(
+                    o=>o.Order).FirstOrDefault(p =>
+				  p.DetailId.Equals(form.DetailId) && p.Order<form.Sort);
 			}
 			else if ((form.Type == 1))
 			{
