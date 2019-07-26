@@ -83,8 +83,8 @@ namespace AdminTemplate.service.Services
 			}
 			else if ((form.Type == 1))
 			{
-				model2 = DbContext.MbDetailItem.FirstOrDefault(p =>
-				  p.DetailId.Equals(form.DetailId) && p.Order == (form.Sort + 1));
+				model2 = DbContext.MbDetailItem.OrderBy(o=>o.Order).FirstOrDefault(p =>
+				  p.DetailId.Equals(form.DetailId) && p.Order > form.Sort);
 			}
 
 			if (model != null && model2 != null)
