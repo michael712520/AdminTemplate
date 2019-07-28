@@ -106,7 +106,7 @@ namespace AdminTemplate.service.Services
 
 
 			var count = query.Count();
-			var list = query.Skip(filter.Start).Take(filter.Length).OrderByDescending(o => o.Sort).ToList();
+			var list = query.OrderByDescending(o => o.Sort).Skip(filter.Start).Take(filter.Length).ToList();
 			return ResponseBodyEntity(list, count);
 		}
 		public NetResult GetAll(string id)
