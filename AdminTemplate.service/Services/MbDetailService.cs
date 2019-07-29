@@ -138,8 +138,14 @@ namespace AdminTemplate.service.Services
 		public NetResult ListSaveItem(List<MbDetailItemDto> list)
 		{
 			if (list != null)
-			{
-				list.ForEach(this.UpdateSaveItem);
+            {
+                int i = 0;
+                list.ForEach(d=>
+                {
+                    d.Order = i;
+                    i++;
+                });
+                list.ForEach(this.UpdateSaveItem);
 				DbContext.SaveChanges();
 				return ResponseBodyEntity();
 			}
