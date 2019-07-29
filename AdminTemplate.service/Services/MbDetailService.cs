@@ -78,13 +78,13 @@ namespace AdminTemplate.service.Services
 			if (form.Type == 0)
 			{
 				model2 = DbContext.MbDetailItem.OrderByDescending(
-                    o=>o.Order).FirstOrDefault(p =>
-				  p.DetailId.Equals(form.DetailId) && p.Order<form.Sort);
+					o => o.Order).FirstOrDefault(p =>
+					p.DetailId.Equals(form.DetailId) && p.Order < form.Sort);
 			}
 			else if ((form.Type == 1))
 			{
-				model2 = DbContext.MbDetailItem.OrderBy(o=>o.Order).FirstOrDefault(p =>
-				  p.DetailId.Equals(form.DetailId) && p.Order > form.Sort);
+				model2 = DbContext.MbDetailItem.OrderBy(o => o.Order).FirstOrDefault(p =>
+					p.DetailId.Equals(form.DetailId) && p.Order > form.Sort);
 			}
 
 			if (model != null && model2 != null)
