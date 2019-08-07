@@ -79,13 +79,16 @@ namespace AdminTemplate.service.Services
 
 					return null;
 				}
+
+             var cdf=   DbContext.QtDetailbatch.FirstOrDefault(p => p.QtDetailId.Equals(id) && p.BatchNumber.Equals(batchNumber));
 				var data = listLatitudeCategory.Where(p => p.LatitudeDetails != null).Select(item => new
 				{
 					name = item.Name,
-					latitudeDetailIds = LatitudeDetailIds(item.LatitudeDetails),
+                
+                    latitudeDetailIds = LatitudeDetailIds(item.LatitudeDetails),
 					//list = model.QtLatitudeDetail.Where(p => item.LatitudeDetails.Contains(p.LatitudeDetailId)).ToList()
 				}).ToList();
-				return ResponseBodyEntity(data);
+				return ResponseBodyEntity(new {data, userName = cdf?.SignerName, });
 			}
 			return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
 		}
