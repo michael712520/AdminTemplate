@@ -114,6 +114,7 @@ namespace AdminTemplate.service.Services
 			//            DbContext.SaveChanges();
 			string id = null;
 			string mbId = null;
+
 			if (listParam != null && listParam.Count > 0)
 			{
 				listParam.ForEach(d =>
@@ -532,6 +533,20 @@ namespace AdminTemplate.service.Services
 							model.BatchNumber = qtDetailBatch.BatchNumber;
 							qtDetailBatch.QtLatitudeDetail.Add(model);
 						}
+
+
+						var firstOrDefault = DbContext.QtDetailItem.FirstOrDefault(p => p.QtDetailId.Equals(id) && (p.Type.Equals("liName")));
+						if (firstOrDefault != null && !string.IsNullOrWhiteSpace(firstOrDefault.SelectResult))
+						{
+							dynamic itMdl = JsonConvert.DeserializeObject(firstOrDefault.SelectResult);
+							if (itMdl.value != null)
+							{
+								string aa = ((Newtonsoft.Json.Linq.JValue)((Newtonsoft.Json.Linq.JProperty)((Newtonsoft.Json.Linq.JContainer)itMdl.value).First).Value).Value.ToString();
+								qtDetailBatch.SignerName = aa;
+							}
+
+						}
+
 
 						qtDetailBatch = DbContext.QtDetailbatch.Add(qtDetailBatch).Entity;
 						DbContext.SaveChanges();
