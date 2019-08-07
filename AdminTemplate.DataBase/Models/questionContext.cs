@@ -568,6 +568,10 @@ namespace AdminTemplate.DataBase.Models
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
+                entity.Property(e => e.SignerName)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.StudentIdCard)
                     .HasColumnName("studentIdCard")
                     .HasMaxLength(255)

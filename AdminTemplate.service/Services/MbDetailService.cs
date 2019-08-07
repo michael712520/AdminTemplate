@@ -138,14 +138,14 @@ namespace AdminTemplate.service.Services
 		public NetResult ListSaveItem(List<MbDetailItemDto> list)
 		{
 			if (list != null)
-            {
-                int i = 0;
-                list.ForEach(d=>
-                {
-                    d.Order = i;
-                    i++;
-                });
-                list.ForEach(this.UpdateSaveItem);
+			{
+				int i = 0;
+				list.ForEach(d =>
+				{
+					d.Order = i;
+					i++;
+				});
+				list.ForEach(this.UpdateSaveItem);
 				DbContext.SaveChanges();
 				return ResponseBodyEntity();
 			}
@@ -158,8 +158,12 @@ namespace AdminTemplate.service.Services
 			if (form.Id == null)
 			{
 				model.Id = Guid.NewGuid().ToString("N");
-				var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
-				if (m != null) model.Order = m.Order + 1;
+				if (model.Order == null)
+				{
+					var m = DbContext.MbDetailItem.AsNoTracking().OrderByDescending(o => o.Order).FirstOrDefault();
+					if (m != null) model.Order = m.Order + 1;
+				}
+
 				if (form.LatitudeDetailIds != null && form.LatitudeDetailIds.Count > 0)
 				{
 					model.LatitudeDetailIds = JsonConvert.SerializeObject(form.LatitudeDetailIds);

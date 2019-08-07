@@ -20,6 +20,7 @@ namespace AdminTemplate.DataBase.Models
         public string TeacherIdCard { get; set; }
         public string ForeignType { get; set; }
         public string StudentIdCard { get; set; }
+        public string SignerName { get; set; }
 
         public virtual QtDetail QtDetail { get; set; }
         public virtual ICollection<QtLatitudeDetail> QtLatitudeDetail { get; set; }
