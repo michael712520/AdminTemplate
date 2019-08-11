@@ -27,6 +27,7 @@ namespace AdminTemplate.DataBase.Models
         public string CallBack { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
+        public string Openid { get; set; }
 
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
         public virtual ICollection<QtDetailbatch> QtDetailbatch { get; set; }

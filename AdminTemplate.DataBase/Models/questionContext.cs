@@ -38,7 +38,7 @@ namespace AdminTemplate.DataBase.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity<LatitudeCategory>(entity =>
             {
@@ -391,6 +391,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasMaxLength(32)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Openid)
+                    .HasColumnName("openid")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Order)
                     .HasColumnName("order")
                     .HasColumnType("int(255)");
@@ -560,6 +565,11 @@ namespace AdminTemplate.DataBase.Models
 
                 entity.Property(e => e.ForeignType)
                     .HasColumnName("foreignType")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Openid)
+                    .HasColumnName("openid")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 

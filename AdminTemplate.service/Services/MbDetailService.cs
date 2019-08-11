@@ -261,5 +261,25 @@ namespace AdminTemplate.service.Services
 			return ResponseBodyEntity();
 		}
 
-	}
+
+        public NetResult UpdateState(string id,int state)
+        {
+          var model=  DbContext.MbDetail.FirstOrDefault(p => p.Id.Equals(id));
+          if (model!=null)
+          {
+              model.State = state;
+              DbContext.MbDetail.Update(model);
+              DbContext.SaveChanges();
+          }
+          return ResponseBodyEntity();
+        }
+
+        public NetResult WxList(PaginationStartAndLengthFilter filter)
+        {
+            var query = DbContext.MbDetail.AsNoTracking().Where(p => p.State == 1);
+            var count = query.Count();
+            var list = query.Skip(filter.Start).Take(filter.Length).ToList();
+            return ResponseBodyEntity(list,count);
+        }
+    }
 }

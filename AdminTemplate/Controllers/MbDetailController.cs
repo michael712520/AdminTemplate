@@ -79,5 +79,26 @@ namespace AdminTemplate.Controllers
 
             return _service.SaveItem(form);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        [HttpPost, Route("UpdateState/{id}/{state}")]
+        public NetResult UpdateState(string id, int state)
+        {
+            return _service.UpdateState(id, state);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        [HttpPost, Route("WxList")]
+        public NetResult WxList(PaginationStartAndLengthFilter filter)
+        {
+            return _service.WxList(filter);
+        }
     }
 }
