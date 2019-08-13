@@ -118,5 +118,20 @@ namespace AdminTemplate.service.BaseServices
 			_netResult.Message = message;
 			return _netResult;
 		}
+		public NetResult Save<T>(T form) where T : class
+		{
+			T model = DbContext.Update<T>(form).Entity;
+			return ResponseBodyEntity(model);
+		}
+		public NetResult Get<T>(string id) where T : class
+		{
+			T model = DbContext.Find<T>(id);
+			return ResponseBodyEntity(model);
+		}
+		public NetResult Delete<T>(string id) where T : class
+		{
+			T model = DbContext.Find<T>(id);
+			return ResponseBodyEntity(model);
+		}
 	}
 }
