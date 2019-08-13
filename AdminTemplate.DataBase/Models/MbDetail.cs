@@ -21,6 +21,7 @@ namespace AdminTemplate.DataBase.Models
         public int? Display { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? UpdateTime { get; set; }
+        public double? Fee { get; set; }
 
         public virtual ICollection<MbDetailItem> MbDetailItem { get; set; }
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }

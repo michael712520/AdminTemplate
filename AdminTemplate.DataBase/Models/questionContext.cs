@@ -38,7 +38,7 @@ namespace AdminTemplate.DataBase.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity<LatitudeCategory>(entity =>
             {
@@ -238,6 +238,10 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnType("int(11)")
                     .HasDefaultValueSql("0");
 
+                entity.Property(e => e.Fee)
+                    .HasColumnName("fee")
+                    .HasColumnType("double(11,0)");
+
                 entity.Property(e => e.Order)
                     .HasColumnName("order")
                     .HasColumnType("int(255)");
@@ -380,6 +384,10 @@ namespace AdminTemplate.DataBase.Models
                     .HasColumnName("display")
                     .HasColumnType("int(11)")
                     .HasDefaultValueSql("0");
+
+                entity.Property(e => e.Fee)
+                    .HasColumnName("fee")
+                    .HasColumnType("double(11,0)");
 
                 entity.Property(e => e.ForeignType)
                     .HasColumnName("foreignType")
@@ -562,6 +570,10 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.CreateTime)
                     .HasColumnName("create_time")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.Fee)
+                    .HasColumnName("fee")
+                    .HasColumnType("double(11,0)");
 
                 entity.Property(e => e.ForeignType)
                     .HasColumnName("foreignType")
