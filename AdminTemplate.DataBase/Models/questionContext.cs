@@ -38,7 +38,7 @@ namespace AdminTemplate.DataBase.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity<LatitudeCategory>(entity =>
             {
@@ -394,6 +394,11 @@ namespace AdminTemplate.DataBase.Models
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
+                entity.Property(e => e.IsFee)
+                    .HasColumnName("is_fee")
+                    .HasColumnType("int(4)")
+                    .HasDefaultValueSql("0");
+
                 entity.Property(e => e.MbDetailId)
                     .HasColumnName("mb_detail_id")
                     .HasMaxLength(32)
@@ -570,10 +575,6 @@ namespace AdminTemplate.DataBase.Models
                 entity.Property(e => e.CreateTime)
                     .HasColumnName("create_time")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                entity.Property(e => e.Fee)
-                    .HasColumnName("fee")
-                    .HasColumnType("double(11,0)");
 
                 entity.Property(e => e.ForeignType)
                     .HasColumnName("foreignType")

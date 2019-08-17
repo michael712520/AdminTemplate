@@ -100,5 +100,17 @@ namespace AdminTemplate.Controllers
 		{
 			return _service.WxList(filter);
 		}
-	}
+        /// <summary>
+        /// 根据模版id更新费用
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="fee"></param>
+        /// <returns></returns>
+        [HttpPost, Route("UpdateFree/{id}/{fee}")]
+        public NetResult UpdateFree(string id, double fee)
+        {
+            return _service.UpdateFree(id, fee);
+        }
+
+    }
 }

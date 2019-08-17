@@ -29,6 +29,7 @@ namespace AdminTemplate.DataBase.Models
         public DateTime? UpdateTime { get; set; }
         public string Openid { get; set; }
         public double? Fee { get; set; }
+        public int? IsFee { get; set; }
 
         public virtual ICollection<QtDetailItem> QtDetailItem { get; set; }
         public virtual ICollection<QtDetailbatch> QtDetailbatch { get; set; }

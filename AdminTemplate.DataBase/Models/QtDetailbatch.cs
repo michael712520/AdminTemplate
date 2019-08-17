@@ -22,7 +22,6 @@ namespace AdminTemplate.DataBase.Models
         public string StudentIdCard { get; set; }
         public string SignerName { get; set; }
         public string Openid { get; set; }
-        public double? Fee { get; set; }
 
         public virtual QtDetail QtDetail { get; set; }
         public virtual ICollection<QtLatitudeDetail> QtLatitudeDetail { get; set; }

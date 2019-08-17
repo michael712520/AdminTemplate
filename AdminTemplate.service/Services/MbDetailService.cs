@@ -281,5 +281,46 @@ namespace AdminTemplate.service.Services
             var list = query.Skip(filter.Start).Take(filter.Length).ToList();
             return ResponseBodyEntity(list,count);
         }
+
+        public NetResult UpdateFree(string id,double fee)
+        {
+            var model=DbContext.MbDetail.FirstOrDefault(p => p.Id.Equals(id));
+            if (model!=null)
+            {
+                model.Fee = fee;
+                DbContext.MbDetail.Update(model);
+
+                IEnumerable<QtDetail> list = DbContext.QtDetail.Where(p => p.MbDetailId.Equals(id)&&p.IsFee==0);
+
+                foreach (var item in list)
+                {
+                    item.Fee = fee;
+                }
+                DbContext.QtDetail.UpdateRange(list);
+                
+                DbContext.SaveChanges();
+                return ResponseBodyEntity();
+            }
+            else
+            {
+                return ResponseBodyEntity("",EnumResult.Error,"id未查询到对象！");
+            }
+        }
+        public NetResult BuyFree(string id, double fee)
+        {
+            var model = DbContext.QtDetail.FirstOrDefault(p => p.Id.Equals(id));
+            if (model != null)
+            {
+                model.Fee = fee;
+                model.IsFee = 1;
+                DbContext.QtDetail.Update(model);
+                DbContext.SaveChanges();
+                return ResponseBodyEntity();
+            }
+            else
+            {
+                return ResponseBodyEntity("", EnumResult.Error, "id未查询到对象！");
+            }
+        }
     }
 }

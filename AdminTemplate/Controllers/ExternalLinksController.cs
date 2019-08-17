@@ -36,7 +36,7 @@ namespace AdminTemplate.Controllers
 		/// </summary>
 		/// <param name="mbQuestionId"></param>
 		/// <returns></returns>
-		[HttpGet, Route("AddLocal/{mbQuestionId}")]
+		[HttpPost, Route("AddLocal/{mbQuestionId}")]
 		public NetResult AddLocal(string mbQuestionId)
 		{
 			return _service.AddLocal(mbQuestionId);
