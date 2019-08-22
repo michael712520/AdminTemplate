@@ -24,7 +24,7 @@ namespace AdminTemplate.service.Services
 				DbContext.QtDetail.Update(mj);
 				callBack = HttpUtility.UrlEncode(callBack, System.Text.Encoding.GetEncoding(65001));
 				DbContext.SaveChanges();
-				return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={mj.Id}&callBack={callBack}");
+				return ResponseBodyEntity($"http://web.chinajpi.org/#/ExternalLinks/wj?qtDetailId={mj.Id}&callBack={callBack}");
 			}
 
 			var model = DbContext.MbDetail.Include(o => o.MbDetailItem).FirstOrDefault(p => p.Id.Equals(mbQuestionId));
@@ -56,7 +56,7 @@ namespace AdminTemplate.service.Services
 			DbContext.QtDetail.Add(qtDetail);
 			DbContext.SaveChanges();
 			callBack = HttpUtility.UrlEncode(callBack, System.Text.Encoding.GetEncoding(65001));
-			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}&callBack={callBack}");
+			return ResponseBodyEntity($"http://web.chinajpi.org/#/ExternalLinks/wj?qtDetailId={qtDetail.Id}&callBack={callBack}");
 		}
 		public NetResult AddLocal(string mbQuestionId)
 		{
@@ -95,12 +95,12 @@ namespace AdminTemplate.service.Services
 		public NetResult GetStudentList(string studentIdCard)
 		{
 
-			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentList?studentIdCard={studentIdCard}");
+			return ResponseBodyEntity($"http://web.chinajpi.org/#/ExternalLinks/studentList?studentIdCard={studentIdCard}");
 		}
 		public NetResult StudentAndMbQuestion(string studentIdCard, string mbQuestionId)
 		{
 
-			return ResponseBodyEntity($"https://www.iu1314.com/#/ExternalLinks/studentAndMbQuestion?studentIdCard={studentIdCard}&mbQuestionId={mbQuestionId}");
+			return ResponseBodyEntity($"http://web.chinajpi.org/#/ExternalLinks/studentAndMbQuestion?studentIdCard={studentIdCard}&mbQuestionId={mbQuestionId}");
 		}
 
 		public NetResult QuestionResult(string studentIdCard, string mbQuestionId)

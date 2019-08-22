@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AdminTemplate.DataBase.Models
 {
-    public partial class questionContext : DbContext
+    public partial class ModelContext : DbContext
     {
-        public questionContext()
+        public ModelContext()
         {
         }
 
-        public questionContext(DbContextOptions<questionContext> options)
+        public ModelContext(DbContextOptions<ModelContext> options)
             : base(options)
         {
         }
@@ -32,7 +32,7 @@ namespace AdminTemplate.DataBase.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySQL("server=47.107.238.102;uid=root;pwd=000000;port=3306;database=question;");
+                optionsBuilder.UseMySQL("server=47.107.238.102;uid=root;pwd=000000;port=3306;database=guo;");
             }
         }
 
@@ -42,7 +42,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<LatitudeCategory>(entity =>
             {
-                entity.ToTable("latitude_category", "question");
+                entity.ToTable("latitude_category");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -67,7 +67,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<LatitudeDetail>(entity =>
             {
-                entity.ToTable("latitude_detail", "question");
+                entity.ToTable("latitude_detail");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(32)
@@ -120,7 +120,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<LatitudeDetailItem>(entity =>
             {
-                entity.ToTable("latitude_detail_item", "question");
+                entity.ToTable("latitude_detail_item");
 
                 entity.Property(e => e.Id)
                     .HasMaxLength(32)
@@ -168,7 +168,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<LatitudeGrade>(entity =>
             {
-                entity.ToTable("latitude_grade", "question");
+                entity.ToTable("latitude_grade");
 
                 entity.HasIndex(e => e.LatitudeDetailId)
                     .HasName("mb_grade_ibfk_1");
@@ -217,7 +217,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<MbDetail>(entity =>
             {
-                entity.ToTable("mb_detail", "question");
+                entity.ToTable("mb_detail");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -270,7 +270,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<MbDetailItem>(entity =>
             {
-                entity.ToTable("mb_detail_item", "question");
+                entity.ToTable("mb_detail_item");
 
                 entity.HasIndex(e => e.DetailId)
                     .HasName("mb_detail_item_ibfk_1");
@@ -360,7 +360,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<QtDetail>(entity =>
             {
-                entity.ToTable("qt_detail", "question");
+                entity.ToTable("qt_detail");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -446,7 +446,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<QtDetailItem>(entity =>
             {
-                entity.ToTable("qt_detail_item", "question");
+                entity.ToTable("qt_detail_item");
 
                 entity.HasIndex(e => e.LatitudeDetailItemId)
                     .HasName("latitude_detail_id");
@@ -553,7 +553,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<QtDetailbatch>(entity =>
             {
-                entity.ToTable("qt_detailbatch", "question");
+                entity.ToTable("qt_detailbatch");
 
                 entity.HasIndex(e => e.QtDetailId)
                     .HasName("qt_detailbatch_ibfk_1");
@@ -622,7 +622,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<QtLatitudeDetail>(entity =>
             {
-                entity.ToTable("qt_latitude_detail", "question");
+                entity.ToTable("qt_latitude_detail");
 
                 entity.HasIndex(e => e.LatitudeDetailId)
                     .HasName("latitude_detail_id");
@@ -690,7 +690,7 @@ namespace AdminTemplate.DataBase.Models
 
             modelBuilder.Entity<SysUser>(entity =>
             {
-                entity.ToTable("sys_user", "question");
+                entity.ToTable("sys_user");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")

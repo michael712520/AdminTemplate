@@ -16,7 +16,7 @@ namespace AdminTemplate.service.BaseServices
 		//	= new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
 		public static readonly LoggerFactory LoggerFactory =
 			new LoggerFactory(new[] { new DebugLoggerProvider((_, __) => true) });
-		protected questionContext DbContext;
+		protected ModelContext DbContext;
 		private readonly NetResult _netResult;
 		public ILogger Logger { get; } =
 			ApplicationLogging.CreateLogger<BaseService>();
@@ -24,8 +24,8 @@ namespace AdminTemplate.service.BaseServices
 		protected BaseService()
 		{
 			var connectionString = AppConfig.GetConnectionString();//发布时候添加数据库连接配置
-			var contextOptions = new DbContextOptionsBuilder<questionContext>().UseMySQL(connectionString).Options;
-			DbContext = new questionContext(contextOptions);
+			var contextOptions = new DbContextOptionsBuilder<ModelContext>().UseMySQL(connectionString).Options;
+			DbContext = new ModelContext(contextOptions);
 			_netResult = new NetResult();
 		}
 		public NetResult ResponseBodyEntity()

@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AdminTemplate.service.BaseServices;
@@ -53,7 +54,7 @@ namespace AdminTemplate
 						.AllowCredentials();
 				});
 			});
-			services.AddDbContext<questionContext>(o =>
+			services.AddDbContext<ModelContext>(o =>
 			{
 				string connectionString = Configuration.GetConnectionString("DefaultConnection");
 				o.UseLoggerFactory(BaseService.LoggerFactory).UseMySQL(connectionString);
@@ -68,8 +69,12 @@ namespace AdminTemplate
 					Title = "xxxxxx的API文档",
 					Description = "xxx作者"
 				});
+                var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, commentsFileName);
+                options.IncludeXmlComments(filePath);
 
-			});
+
+            });
 			services.AddAutoMapper();
 			services.Scan(x =>
 			{

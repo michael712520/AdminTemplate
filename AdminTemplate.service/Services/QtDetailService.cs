@@ -81,14 +81,16 @@ namespace AdminTemplate.service.Services
 				}
 
 				var cdf = DbContext.QtDetailbatch.FirstOrDefault(p => p.QtDetailId.Equals(id) && p.BatchNumber.Equals(batchNumber));
-				var data = listLatitudeCategory.Where(p => p.LatitudeDetails != null).Select(item => new
+				var data = listLatitudeCategory.Where(p => p.LatitudeDetails != null).ToList();
+
+                var red=data.Select(item => new
 				{
 					name = item.Name,
 
 					latitudeDetailIds = LatitudeDetailIds(item.LatitudeDetails),
 					//list = model.QtLatitudeDetail.Where(p => item.LatitudeDetails.Contains(p.LatitudeDetailId)).ToList()
 				}).ToList();
-				return ResponseBodyEntity(new { data, userName = cdf?.SignerName, });
+				return ResponseBodyEntity(new { data=red, userName = cdf?.SignerName, });
 			}
 			return ResponseBodyEntity("", EnumResult.Error, "对象不存在");
 		}
@@ -225,7 +227,7 @@ namespace AdminTemplate.service.Services
 							{
 
 
-								if (relationship.ax.s != null && relationship.cx.s.Count > 0 && relationship.ax.v.Value > 0)
+								if (relationship.ax.s != null && relationship.ax.s.Count > 0 && relationship.ax.v.Value > 0)
 								{
 
 									var outStr = listLatitudeDetailItem

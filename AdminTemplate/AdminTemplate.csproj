@@ -20,4 +20,10 @@
     <ProjectReference Include="..\AdminTemplate.service\AdminTemplate.service.csproj" />
     <ProjectReference Include="..\AuxiliaryApplications\Jinhe.Storage.App\Jinhe.Storage.App.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
