@@ -1,4 +1,5 @@
 ﻿using AdminTemplate.DataBase.Models;
+using AdminTemplate.service.BaseServices;
 using AdminTemplate.service.ConfigServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -14,120 +15,119 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AdminTemplate.service.BaseServices;
 
 namespace AdminTemplate
 {
-	public class Startup
-	{
-		public IHostingEnvironment Environment { get; }
-		public Startup(IConfiguration configuration, IHostingEnvironment environment)
-		{
-			Environment = environment;
-			Configuration = configuration;
-		}
+    public class Startup
+    {
+        public IHostingEnvironment Environment { get; }
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
+        {
+            Environment = environment;
+            Configuration = configuration;
+        }
 
-		public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
-		public void ConfigureServices(IServiceCollection services)
-		{
-			services.AddLoggingFileUI();
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(
-				opts =>
-				{
-					//忽略循环引用
-					opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddLoggingFileUI();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(
+                opts =>
+                {
+                    //忽略循环引用
+                    opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
-					//设置时间格式
-					opts.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-				});
+                    //设置时间格式
+                    opts.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+                });
 
-			//跨域
-			services.AddCors(options =>
-			{
-				options.AddPolicy("AllowSpecificOrigin", policy =>
-				{
-					policy.AllowAnyOrigin()
-						.AllowAnyHeader()
-						.AllowAnyMethod()
-						.AllowCredentials();
-				});
-			});
-			services.AddDbContext<ModelContext>(o =>
-			{
-				string connectionString = Configuration.GetConnectionString("DefaultConnection");
-				o.UseLoggerFactory(BaseService.LoggerFactory).UseMySQL(connectionString);
-				// o.UseMySQL()
+            //跨域
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+            services.AddDbContext<ModelContext>(o =>
+            {
+                string connectionString = Configuration.GetConnectionString("DefaultConnection");
+                o.UseLoggerFactory(BaseService.LoggerFactory).UseMySQL(connectionString);
+                // o.UseMySQL()
 
-			});
-			services.AddSwaggerGen(options =>
-			{
-				options.SwaggerDoc("v1", info: new OpenApiInfo
-				{
-					Version = "Version 1.0",
-					Title = "xxxxxx的API文档",
-					Description = "xxx作者"
-				});
-                var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
+            });
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", info: new OpenApiInfo
+                {
+                    Version = "Version 1.0",
+                    Title = "xxxxxx的API文档",
+                    Description = "xxx作者"
+                });
+                var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, commentsFileName);
                 options.IncludeXmlComments(filePath);
 
 
             });
-			services.AddAutoMapper();
-			services.Scan(x =>
-			{
+            services.AddAutoMapper();
+            services.Scan(x =>
+            {
 
-				var entryAssembly = Assembly.GetEntryAssembly();
-				if (entryAssembly != null)
-				{
-					var referencedAssemblies = entryAssembly.GetReferencedAssemblies().Select(Assembly.Load);
-					var assemblies = new List<Assembly> { entryAssembly }.Concat(referencedAssemblies);
-					assemblies = assemblies.Where(item => item.GetName().Name.StartsWith("AdminTemplate") || item.GetName().Name.StartsWith("GlobalConfiguration"));
-					x.FromAssemblies(assemblies)
-						.AddClasses()
-						//TODO:加上会因为日志接口的泛型问题报错
-						//.AsImplementedInterfaces()
-						.AsSelf()
-						.WithScopedLifetime();
-				}
-			});
-		}
+                var entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly != null)
+                {
+                    var referencedAssemblies = entryAssembly.GetReferencedAssemblies().Select(Assembly.Load);
+                    var assemblies = new List<Assembly> { entryAssembly }.Concat(referencedAssemblies);
+                    assemblies = assemblies.Where(item => item.GetName().Name.StartsWith("AdminTemplate") || item.GetName().Name.StartsWith("GlobalConfiguration"));
+                    x.FromAssemblies(assemblies)
+                        .AddClasses()
+                        //TODO:加上会因为日志接口的泛型问题报错
+                        //.AsImplementedInterfaces()
+                        .AsSelf()
+                        .WithScopedLifetime();
+                }
+            });
+        }
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-		{
-			app.UseCors("AllowSpecificOrigin");
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-			}
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            app.UseCors("AllowSpecificOrigin");
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
-			app.UseSwagger();
-			app.UseSwaggerUI(c =>
-			{
-				c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrgAPI");
-				c.DocExpansion(DocExpansion.None);
-			});
-			app.UseStaticFiles();
-			//mvc 路由配置
-			app.UseMvc(routes =>
-			{
-				routes.MapRoute(
-					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
-			});
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrgAPI");
+                c.DocExpansion(DocExpansion.None);
+            });
+            app.UseStaticFiles();
+            //mvc 路由配置
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
 
 
-			DefaultFilesOptions options = new DefaultFilesOptions();
-			// options.DefaultFileNames.Add("Swagger-ui.html");
-			app.UseDefaultFiles(options);
-			//AutoMapper
-			AutoMapper.Mapper.Initialize(x =>
-			{
-				x.AddProfile<ServiceProfiles>();
-			});
-		}
-	}
+            DefaultFilesOptions options = new DefaultFilesOptions();
+            // options.DefaultFileNames.Add("Swagger-ui.html");
+            app.UseDefaultFiles(options);
+            //AutoMapper
+            AutoMapper.Mapper.Initialize(x =>
+            {
+                x.AddProfile<ServiceProfiles>();
+            });
+        }
+    }
 }
